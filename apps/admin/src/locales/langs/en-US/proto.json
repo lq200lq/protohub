@@ -17,6 +17,7 @@
     "expand": "Show more",
     "disabled": "Disabled",
     "loadFailed": "Failed to load",
+    "modify": "Edit",
     "more": "More",
     "refresh": "Refresh",
     "remark": "Remark",
@@ -360,6 +361,7 @@
     "profileDesc": "Update name, email, phone and avatar",
     "passwordTitle": "Change Password",
     "passwordDesc": "All devices must sign in again after a password change",
+    "passwordReadonlyTip": "The password cannot be viewed. Click Edit at the top right to change it; all devices must sign in again afterward.",
     "forceTitle": "Password change required",
     "forceDesc": "Set a new password before entering the system",
     "fields": {

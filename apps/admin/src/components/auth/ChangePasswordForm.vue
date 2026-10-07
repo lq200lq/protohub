@@ -87,7 +87,12 @@ async function handleSubmit() {
   }
 }
 
-defineExpose({ handleSubmit });
+/** 账号安全卡片的「取消」用：清空已输入的口令与校验态，不触发提交 */
+async function resetForm() {
+  await formApi.resetForm();
+}
+
+defineExpose({ handleSubmit, resetForm });
 </script>
 
 <template>

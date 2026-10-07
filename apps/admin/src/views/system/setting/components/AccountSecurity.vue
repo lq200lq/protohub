@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { UserInfo } from '@protohub/shared';
+
 import type { VbenFormSchema } from '#/adapter/form';
 
 import { computed, onMounted, ref } from 'vue';
 
-import { Button, Card, message } from 'ant-design-vue';
-
 import { formatDateTime } from '@vben/utils';
+
+import { Button, Card, Descriptions, message } from 'ant-design-vue';
 
 import { useVbenForm, z } from '#/adapter/form';
 import { getProfileApi, getUserInfoApi, updateProfileApi } from '#/api';
@@ -22,6 +23,7 @@ interface ProfileFormValues {
   email?: string;
   phone?: string;
   realName: string;
+  username?: string;
 }
 
 const authStore = useAuthStore();
@@ -35,6 +37,13 @@ const lastLogin = ref<{ at: null | string; ip: null | string }>({
   at: null,
   ip: null,
 });
+
+/** 两张卡片各自独立的编辑态：点卡片上的「修改」才进入，取消回到加载时的快照 */
+const editingProfile = ref(false);
+const editingPassword = ref(false);
+/** 取消时用它回填表单，避免把放弃的输入残留到下次进入编辑 */
+const profileSnapshot = ref<ProfileFormValues>({ realName: '' });
+const passwordFormRef = ref<null | { resetForm: () => Promise<void> }>(null);
 
 const schema = computed((): VbenFormSchema[] => {
   return [
@@ -79,6 +88,19 @@ const [ProfileForm, profileFormApi] = useVbenForm({
   wrapperClass: 'grid-cols-1',
 });
 
+/** 只读态展示的字段（值取自已保存的用户信息，空值给占位符） */
+const profileFields = computed(() => {
+  const info = me.value;
+  const empty = '—';
+  return [
+    { label: $t('proto.account.fields.realName'), value: info?.realName || empty },
+    { label: $t('proto.account.fields.email'), value: info?.email || empty },
+    { label: $t('proto.account.fields.phone'), value: info?.phone || empty },
+    { label: $t('proto.account.fields.avatar'), value: info?.avatar || empty },
+    { label: $t('proto.account.fields.username'), value: info?.username || empty },
+  ];
+});
+
 async function loadProfile() {
   loadingProfile.value = true;
   profileError.value = null;
@@ -89,13 +111,14 @@ async function loadProfile() {
     ]);
     me.value = info;
     lastLogin.value = { at: detail.lastLoginAt, ip: detail.lastLoginIp };
-    await profileFormApi.setValues({
+    profileSnapshot.value = {
       avatar: me.value.avatar ?? '',
       email: me.value.email ?? '',
       phone: me.value.phone ?? '',
       realName: me.value.realName,
       username: me.value.username,
-    });
+    };
+    await profileFormApi.setValues(profileSnapshot.value);
   } catch (error) {
     profileError.value =
       error instanceof Error ? error.message : String(error);
@@ -123,9 +146,21 @@ async function handleSaveProfile() {
     // 重新拉取，让姓名/头像在全局（下拉、水印）与 forcePasswordChange 等派生字段保持一致
     await authStore.fetchUserInfo();
     message.success($t('proto.account.profileUpdated'));
+    editingProfile.value = false;
+    await loadProfile();
   } finally {
     savingProfile.value = false;
   }
+}
+
+async function cancelProfile() {
+  await profileFormApi.setValues(profileSnapshot.value);
+  editingProfile.value = false;
+}
+
+async function cancelPassword() {
+  await passwordFormRef.value?.resetForm();
+  editingPassword.value = false;
 }
 
 async function handlePasswordChanged() {
@@ -138,6 +173,15 @@ async function handlePasswordChanged() {
 <template>
   <div class="grid gap-4 lg:grid-cols-2">
     <Card size="small" :title="$t('proto.account.profileTitle')">
+      <template #extra>
+        <Button
+          v-if="!editingProfile"
+          size="small"
+          @click="editingProfile = true"
+        >
+          {{ $t('proto.common.modify') }}
+        </Button>
+      </template>
       <DataState
         :loading="loadingProfile && !me"
         :error="profileError"
@@ -151,21 +195,55 @@ async function handlePasswordChanged() {
           {{ formatDateTime(lastLogin.at ?? undefined) || $t('proto.account.neverLoggedIn') }}
           <template v-if="lastLogin.ip"> · {{ lastLogin.ip }}</template>
         </p>
-        <ProfileForm />
-        <div class="mt-2 flex justify-end">
-          <Button
-            type="primary"
-            :loading="savingProfile"
-            @click="handleSaveProfile"
+
+        <Descriptions v-if="!editingProfile" :column="1" size="small">
+          <Descriptions.Item
+            v-for="field in profileFields"
+            :key="field.label"
+            :label="field.label"
           >
-            {{ $t('proto.common.save') }}
-          </Button>
-        </div>
+            {{ field.value }}
+          </Descriptions.Item>
+        </Descriptions>
+        <template v-else>
+          <ProfileForm />
+          <div class="mt-2 flex justify-end gap-2">
+            <Button @click="cancelProfile">
+              {{ $t('proto.common.cancel') }}
+            </Button>
+            <Button
+              type="primary"
+              :loading="savingProfile"
+              @click="handleSaveProfile"
+            >
+              {{ $t('proto.common.save') }}
+            </Button>
+          </div>
+        </template>
       </DataState>
     </Card>
 
     <Card size="small" :title="$t('proto.account.passwordTitle')">
-      <ChangePasswordForm @success="handlePasswordChanged" />
+      <template #extra>
+        <Button
+          v-if="!editingPassword"
+          size="small"
+          @click="editingPassword = true"
+        >
+          {{ $t('proto.common.modify') }}
+        </Button>
+        <Button v-else size="small" @click="cancelPassword">
+          {{ $t('proto.common.cancel') }}
+        </Button>
+      </template>
+      <p v-if="!editingPassword" class="text-muted-foreground text-sm">
+        {{ $t('proto.account.passwordReadonlyTip') }}
+      </p>
+      <ChangePasswordForm
+        v-else
+        ref="passwordFormRef"
+        @success="handlePasswordChanged"
+      />
     </Card>
   </div>
 </template>

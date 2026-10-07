@@ -17,6 +17,7 @@
     "expand": "展开",
     "disabled": "禁用",
     "loadFailed": "加载失败",
+    "modify": "修改",
     "more": "更多",
     "refresh": "刷新",
     "remark": "备注",
@@ -360,6 +361,7 @@
     "profileDesc": "修改姓名、邮箱、电话与头像",
     "passwordTitle": "修改密码",
     "passwordDesc": "修改成功后所有设备都需要重新登录",
+    "passwordReadonlyTip": "密码不可查看；点击右上角「修改」进入编辑，改密后所有设备需重新登录。",
     "forceTitle": "首次登录需要修改密码",
     "forceDesc": "为了账号安全，请先设置新密码",
     "fields": {
