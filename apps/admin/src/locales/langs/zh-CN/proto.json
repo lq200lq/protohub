@@ -353,14 +353,7 @@
     }
   },
   "settings": {
-    "title": "设置",
-    "tabs": {
-      "security": "账号安全",
-      "user": "用户管理",
-      "role": "角色管理",
-      "menu": "菜单管理",
-      "log": "日志"
-    }
+    "accountSecurity": "账号安全"
   },
   "account": {
     "profileTitle": "个人资料",
@@ -503,7 +496,7 @@
       "embedded": "内嵌",
       "link": "外链"
     },
-    "componentTip": "相对 src/views 的路径，如 /system/setting/index（不带 .vue）",
+    "componentTip": "相对 src/views 的路径，如 /system/setting/user/index（不带 .vue）",
     "urlRule": "请填写合法的 URL（以 http:// 或 https:// 开头）",
     "rootOption": "顶级",
     "deleteConfirm": "确认删除“{0}”？存在子节点时会被拒绝。"

@@ -353,14 +353,7 @@
     }
   },
   "settings": {
-    "title": "Settings",
-    "tabs": {
-      "security": "Account Security",
-      "user": "Users",
-      "role": "Roles",
-      "menu": "Menus",
-      "log": "Logs"
-    }
+    "accountSecurity": "Account Security"
   },
   "account": {
     "profileTitle": "Profile",
@@ -503,7 +496,7 @@
       "embedded": "Embedded",
       "link": "Link"
     },
-    "componentTip": "Path relative to src/views, e.g. /system/setting/index (no .vue)",
+    "componentTip": "Path relative to src/views, e.g. /system/setting/user/index (no .vue)",
     "urlRule": "Enter a valid URL starting with http:// or https://",
     "rootOption": "Root",
     "deleteConfirm": "Delete \"{0}\"? Rejected when children exist."

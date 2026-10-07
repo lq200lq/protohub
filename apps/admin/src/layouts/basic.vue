@@ -21,7 +21,7 @@ import LoginForm from '#/views/_core/authentication/login.vue';
 /**
  * 一期没有通知渠道（前端设计 §12：右上铃铛预留位不显示），
  * 所以这里不渲染 Notification，也不放任何 mock 数据。
- * 用户下拉只留两项：账号安全（后端菜单里的 /system/setting?tab=security）与退出登录。
+ * 用户下拉只留两项：账号安全（系统设置的账号安全子菜单）与退出登录。
  */
 const router = useRouter();
 const userStore = useUserStore();
@@ -33,11 +33,11 @@ const { isDark } = usePreferences();
 const menus = computed(() => [
   {
     handler: () => {
-      // 个人中心 = 设置页的账号安全 Tab（前端设计 §3.8），不再单独开路由
-      router.push({ path: '/system/setting', query: { tab: 'security' } });
+      // 个人中心 = 系统设置的账号安全子菜单（前端设计 §3.8），不再单独开路由
+      router.push({ path: '/system/setting/security' });
     },
     icon: 'lucide:user',
-    text: $t('proto.settings.tabs.security'),
+    text: $t('proto.settings.accountSecurity'),
   },
 ]);
 
