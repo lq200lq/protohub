@@ -425,8 +425,10 @@
     }
   },
   "role": {
-    "listTitle": "Roles",
     "createTitle": "New Role",
+    "editTitle": "Edit Role",
+    "permAction": "Permissions",
+    "permDrawerTitle": "Permissions: {0}",
     "columns": {
       "name": "Name",
       "code": "Code",
@@ -451,11 +453,8 @@
     },
     "permissionsTitle": "Permission codes",
     "menuTitle": "Menu permissions",
-    "panelEmpty": "Select a role on the left to configure",
-    "saveBasic": "Save basic info",
     "savePermissions": "Save grants",
     "deleteConfirm": "Delete role \"{0}\"? Rejected while users are bound.",
-    "noAssignPerm": "No \"assign permission\" rights; only basic info can be edited",
     "modules": {
       "dashboard": "Dashboard",
       "proto": "Prototype",

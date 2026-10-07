@@ -425,8 +425,10 @@
     }
   },
   "role": {
-    "listTitle": "角色列表",
     "createTitle": "新建角色",
+    "editTitle": "编辑角色",
+    "permAction": "权限",
+    "permDrawerTitle": "权限授权：{0}",
     "columns": {
       "name": "名称",
       "code": "编码",
@@ -451,11 +453,8 @@
     },
     "permissionsTitle": "权限码",
     "menuTitle": "菜单权限",
-    "panelEmpty": "从左侧选择角色开始配置",
-    "saveBasic": "保存基本信息",
     "savePermissions": "保存授权",
     "deleteConfirm": "确认删除角色“{0}”？有用户绑定时会被拒绝。",
-    "noAssignPerm": "当前账号无“角色授权”权限，仅可编辑基本信息",
     "modules": {
       "dashboard": "工作台",
       "proto": "原型业务",

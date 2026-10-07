@@ -3,35 +3,51 @@ import type { RoleListItem } from '@protohub/shared';
 
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { useAccess } from '@vben/access';
+import { useVbenDrawer } from '@vben/common-ui';
 
-import { Alert, Button, Modal, message } from 'ant-design-vue';
+import { Alert, Button, Dropdown, Menu, MenuItem, message, Modal } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteSystemRoleApi, getMenuTreeApi, getSystemRolesApi } from '#/api';
+import { deleteSystemRoleApi, getSystemRolesApi } from '#/api';
 import { $t } from '#/locales';
-import { menuTreeToCheckableTree } from '#/utils/menu-tree';
 import { toErrorMessage } from '#/utils/error';
 
-import RoleDetailPanel from './RoleDetailPanel.vue';
+import RoleFormDrawer from './RoleFormDrawer.vue';
+import RolePermDrawer from './RolePermDrawer.vue';
 
 defineOptions({ name: 'RoleManage' });
 
 /**
- * 角色管理 Tab：左列表 + 右配置面板（前端设计 §3.8）。
- * 新建与编辑都走右侧同一个面板（RoleDetailPanel 的两种形态），
- * 列表只负责选中与删除，避免出现两份"角色基本信息"表单。
+ * 角色管理（前端设计 §3.8：角色列表；§10.3 新建/编辑/授权一律走 Drawer）。
+ * 操作列：「权限」按钮开授权抽屉，编辑/删除收进「⋯」下拉；
+ * 基本信息与授权拆在两个抽屉里，互不混装。
  */
 const { hasAccessByCodes } = useAccess();
 
-const selected = ref<null | RoleListItem>(null);
-const menuTree = ref<ReturnType<typeof menuTreeToCheckableTree>>([]);
-const loadError = ref<null | string>(null);
+interface RowMenuItem {
+  danger?: boolean;
+  disabled?: boolean;
+  key: string;
+  label: string;
+}
 
 const canCreate = computed(() => hasAccessByCodes(['system:role:create']));
+const canUpdate = computed(() => hasAccessByCodes(['system:role:update']));
 const canDelete = computed(() => hasAccessByCodes(['system:role:delete']));
+const canAssignPerm = computed(() =>
+  hasAccessByCodes(['system:role:assignperm']),
+);
+
+/* 一个能力一个组件：表单抽屉与授权抽屉各自独立（同 UserManage 的组织方式） */
+const [RoleForm, roleFormApi] = useVbenDrawer({
+  connectedComponent: RoleFormDrawer,
+});
+const [RolePerm, rolePermApi] = useVbenDrawer({
+  connectedComponent: RolePermDrawer,
+});
 
 const [Grid, gridApi] = useVbenVxeGrid<RoleListItem>({
   gridOptions: {
@@ -65,7 +81,7 @@ const [Grid, gridApi] = useVbenVxeGrid<RoleListItem>({
         fixed: 'right',
         slots: { default: 'action' },
         title: $t('proto.common.action'),
-        width: 80,
+        width: 140,
       },
     ],
     height: 'auto',
@@ -76,14 +92,6 @@ const [Grid, gridApi] = useVbenVxeGrid<RoleListItem>({
           try {
             const roles = await getSystemRolesApi();
             loadError.value = null;
-            if (selected.value) {
-              const stillThere = roles.find(
-                (role) => role.id === selected.value?.id,
-              );
-              selected.value = stillThere ?? roles[0] ?? null;
-            } else {
-              selected.value = roles[0] ?? null;
-            }
             return { items: roles, total: roles.length };
           } catch (error) {
             loadError.value =
@@ -96,23 +104,23 @@ const [Grid, gridApi] = useVbenVxeGrid<RoleListItem>({
     rowConfig: { keyField: 'id' },
     toolbarConfig: { custom: true },
   } as VxeTableGridOptions<RoleListItem>,
-  gridEvents: {
-    cellClick: ({ row }: { row: RoleListItem }) => {
-      selected.value = row;
-    },
-  },
 });
 
-/** 授权用的菜单树：排除 button 节点（按钮权限走权限码勾选） */
-async function loadMenuTree() {
-  const tree = await getMenuTreeApi();
-  menuTree.value = menuTreeToCheckableTree(tree, { excludeButtons: true });
-}
-
-onMounted(loadMenuTree);
+const loadError = ref<null | string>(null);
 
 function onCreate() {
-  selected.value = null;
+  roleFormApi.setData({});
+  roleFormApi.open();
+}
+
+function onEdit(row: RoleListItem) {
+  roleFormApi.setData({ builtIn: row.builtIn, id: row.id });
+  roleFormApi.open();
+}
+
+function onAssignPermissions(row: RoleListItem) {
+  rolePermApi.setData({ id: row.id, name: row.name });
+  rolePermApi.open();
 }
 
 function onDelete(row: RoleListItem) {
@@ -122,21 +130,44 @@ function onDelete(row: RoleListItem) {
     onOk: async () => {
       await deleteSystemRoleApi(row.id);
       message.success($t('proto.common.success'));
-      selected.value = null;
       gridApi.query();
     },
     title: $t('proto.common.delete'),
   });
 }
 
-function onCreated(role: RoleListItem) {
-  selected.value = role;
-  gridApi.query();
+/** 行内除「权限」外的操作收进一个「⋯」Dropdown（前端设计 §10.3），按权限码过滤 */
+function rowMenus(row: RoleListItem): RowMenuItem[] {
+  const items: (false | null | RowMenuItem)[] = [
+    canUpdate.value && { key: 'edit', label: $t('proto.common.edit') },
+    canDelete.value && {
+      danger: true,
+      disabled: row.builtIn,
+      key: 'delete',
+      label: $t('proto.common.delete'),
+    },
+  ];
+  return items.filter(
+    (item): item is RowMenuItem => item !== false && item !== null,
+  );
+}
+
+function onMenuClick(row: RoleListItem, info: { key: number | string }) {
+  switch (info.key) {
+    case 'delete': {
+      onDelete(row);
+      break;
+    }
+    case 'edit': {
+      onEdit(row);
+      break;
+    }
+  }
 }
 </script>
 
 <template>
-  <div>
+  <div class="flex h-full flex-col gap-2">
     <Alert v-if="loadError" :message="loadError" banner type="error">
       <template #action>
         <Button size="small" @click="gridApi.query()">
@@ -145,51 +176,60 @@ function onCreated(role: RoleListItem) {
       </template>
     </Alert>
 
-    <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
-      <Grid>
-        <template #toolbar-tools>
-          <Button v-if="canCreate" type="primary" @click="onCreate">
-            {{ $t('proto.common.create') }}
-          </Button>
-        </template>
+    <Grid class="min-h-0 flex-1">
+      <template #toolbar-tools>
+        <Button v-if="canCreate" type="primary" @click="onCreate">
+          {{ $t('proto.common.create') }}
+        </Button>
+      </template>
 
-        <template #name="{ row }">
-          <span class="font-semibold">{{ row.name }}</span>
-          <span v-if="row.builtIn" class="text-muted-foreground ml-1 text-xs">
-            {{ $t('proto.role.builtIn') }}
-          </span>
-        </template>
+      <template #name="{ row }">
+        <span class="font-semibold">{{ row.name }}</span>
+        <span v-if="row.builtIn" class="text-muted-foreground ml-1 text-xs">
+          {{ $t('proto.role.builtIn') }}
+        </span>
+      </template>
 
-        <template #code="{ row }">
-          <span class="text-muted-foreground font-mono text-[13px]">
-            {{ row.code }}
-          </span>
-        </template>
+      <template #code="{ row }">
+        <span class="text-muted-foreground font-mono text-[13px]">
+          {{ row.code }}
+        </span>
+      </template>
 
-        <template #dataScope="{ row }">
-          {{ $t(`proto.role.dataScopes.${row.dataScope}`) }}
-        </template>
+      <template #dataScope="{ row }">
+        {{ $t(`proto.role.dataScopes.${row.dataScope}`) }}
+      </template>
 
-        <template #action="{ row }">
+      <template #action="{ row }">
+        <div class="flex items-center gap-1">
           <Button
-            v-if="canDelete"
-            :disabled="row.builtIn"
-            danger
+            v-if="canAssignPerm"
             size="small"
             type="link"
-            @click.stop="onDelete(row)"
+            @click.stop="onAssignPermissions(row)"
           >
-            {{ $t('proto.common.delete') }}
+            {{ $t('proto.role.permAction') }}
           </Button>
-        </template>
-      </Grid>
+          <Dropdown v-if="canUpdate || canDelete" :trigger="['click']">
+            <Button size="small" type="text">⋯</Button>
+            <template #overlay>
+              <Menu @click="onMenuClick(row, $event)">
+                <MenuItem
+                  v-for="item in rowMenus(row)"
+                  :key="item.key"
+                  :danger="item.danger"
+                  :disabled="item.disabled"
+                >
+                  {{ item.label }}
+                </MenuItem>
+              </Menu>
+            </template>
+          </Dropdown>
+        </div>
+      </template>
+    </Grid>
 
-      <RoleDetailPanel
-        :menu-tree="menuTree"
-        :role="selected"
-        @created="onCreated"
-        @reloaded="gridApi.query()"
-      />
-    </div>
+    <RoleForm @reload="gridApi.query()" />
+    <RolePerm @reload="gridApi.query()" />
   </div>
 </template>
