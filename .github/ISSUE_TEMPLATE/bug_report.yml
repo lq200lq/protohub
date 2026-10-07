@@ -1,0 +1,57 @@
+name: 🐛 报告 Bug
+description: 某个功能不符合预期、报错或界面异常
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈！安全问题请**不要**提公开 issue，改走 [SECURITY.md](../../../../SECURITY.md)。
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 发生了什么
+      description: 一句话概括问题，以及它对使用的影响。
+      placeholder: 例如：上传 100MB 以上的 zip 后抽屉一直转圈，没有任何提示。
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 从干净状态开始，尽量给出可重复的最小步骤。
+      placeholder: |
+        1. 登录管理端，进入「原型项目」
+        2. 点「新建原型」，上传 …
+        3. 观察 …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 运行环境
+      description: 操作系统、浏览器及版本、Node 版本、部署方式（pnpm dev / nginx / docker）。
+      placeholder: |
+        macOS 15 · Chrome 130 · Node v24.18.0 · pnpm dev
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志 / 截图
+      description: 服务端日志、浏览器控制台报错、界面截图（可拖拽图片进来）。请先脱敏（令牌、口令、内网地址）。
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 提交前确认
+      options:
+        - label: 我已搜索过现有 Issue，没有重复
+          required: true
+        - label: 这不是安全漏洞（否则我会走 SECURITY.md 私密上报）
+          required: true

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 🔒 安全漏洞私密上报
+    url: https://github.com/lq200lq/protohub/blob/main/SECURITY.md
+    about: 安全问题不要开公开 Issue，按 SECURITY.md 私密上报
+  - name: 📚 设计文档
+    url: https://github.com/lq200lq/protohub/tree/main/docs
+    about: 提问前先看看文档地图 docs/README.md，很多问题那里有答案
