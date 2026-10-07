@@ -44,6 +44,9 @@
     "restore": "恢复上架",
     "sort": "排序"
   },
+  "devLogin": {
+    "label": "开发环境账号"
+  },
   "codeCheck": {
     "available": "可以使用",
     "checking": "正在校验编码…",

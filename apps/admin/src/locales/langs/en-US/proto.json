@@ -44,6 +44,9 @@
     "restore": "Restore",
     "sort": "Sort"
   },
+  "devLogin": {
+    "label": "Development account"
+  },
   "codeCheck": {
     "available": "Available",
     "checking": "Checking code…",
