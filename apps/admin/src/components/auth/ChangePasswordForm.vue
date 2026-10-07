@@ -95,7 +95,7 @@ defineExpose({ handleSubmit });
     <Form />
     <div class="mt-2 flex justify-end">
       <Button type="primary" :loading="submitting" @click="handleSubmit">
-        {{ $t('proto.common.confirm') }}
+        {{ $t('proto.common.save') }}
       </Button>
     </div>
   </div>

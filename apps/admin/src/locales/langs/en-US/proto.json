@@ -198,7 +198,7 @@
     "members": {
       "empty": "No members yet",
       "selectPlaceholder": "Select users to add",
-      "save": "Save members",
+      "save": "Manage members",
       "ownerTip": "The creator is always the owner and cannot be removed; member roles are recorded only in phase 1.",
       "updated": "Members updated",
       "usersLoadFailed": "Failed to load user list"

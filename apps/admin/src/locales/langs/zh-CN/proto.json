@@ -198,7 +198,7 @@
     "members": {
       "empty": "暂无成员",
       "selectPlaceholder": "选择用户加入项目",
-      "save": "保存成员",
+      "save": "管理成员",
       "ownerTip": "创建人默认是所有者且不会被移除；成员角色一期仅记录展示，不据此做差异授权。",
       "updated": "成员已更新",
       "usersLoadFailed": "用户列表加载失败"
