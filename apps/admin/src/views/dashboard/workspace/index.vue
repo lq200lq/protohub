@@ -97,19 +97,8 @@ load();
 </script>
 
 <template>
-  <Page :title="$t('proto.workspace.title')">
-    <template #extra>
-      <Button
-        v-if="canUpload"
-        data-testid="workspace-upload"
-        type="primary"
-        @click="onUpload"
-      >
-        {{ $t('proto.workspace.upload') }}
-      </Button>
-    </template>
-
-    <div class="flex flex-col gap-4">
+  <Page auto-content-height>
+    <div class="flex h-full min-h-0 flex-col gap-4">
       <!-- 失败一处说明一次并给重试（§10.2），两块内容不各写一遍"加载失败" -->
       <Alert v-if="failed" :message="error ?? ''" banner type="error">
         <template #action>
@@ -137,13 +126,26 @@ load();
            由上面的 Alert 一处说明；有上一份数据时照样展示（§10.2 不清空） -->
       <div
         v-if="overview !== null || !failed"
-        class="grid grid-cols-1 gap-4 xl:grid-cols-3"
+        class="flex min-h-0 flex-1 flex-col gap-4 xl:flex-row"
       >
         <Card
           :bordered="false"
-          class="xl:col-span-2"
+          :body-style="{ flex: 1, minHeight: 0, overflowY: 'auto' }"
+          class="flex min-h-0 flex-1 flex-col overflow-hidden xl:flex-[2]"
+          :head-style="{ flexShrink: 0 }"
           :title="$t('proto.workspace.recentPrototypes.title')"
         >
+          <template #extra>
+            <Button
+              v-if="canUpload"
+              data-testid="workspace-upload"
+              type="primary"
+              @click="onUpload"
+            >
+              {{ $t('proto.workspace.upload') }}
+            </Button>
+          </template>
+
           <DataState
             :empty="recentPrototypes.length === 0"
             :empty-text="$t('proto.workspace.recentPrototypes.empty')"
@@ -191,6 +193,9 @@ load();
 
         <Card
           :bordered="false"
+          :body-style="{ flex: 1, minHeight: 0, overflowY: 'auto' }"
+          class="flex min-h-0 flex-1 flex-col overflow-hidden"
+          :head-style="{ flexShrink: 0 }"
           :title="$t('proto.workspace.recentEvents.title')"
         >
           <ReleaseEventTimeline
