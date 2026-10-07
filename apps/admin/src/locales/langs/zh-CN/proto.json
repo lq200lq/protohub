@@ -1,0 +1,575 @@
+{
+  "common": {
+    "action": "操作",
+    "archive": "归档",
+    "cancel": "取消",
+    "collapse": "收起",
+    "confirm": "确定",
+    "copy": "复制",
+    "copySuccess": "已复制到剪贴板",
+    "copyFailed": "复制失败，请手动复制",
+    "create": "新建",
+    "delete": "删除",
+    "detail": "查看详情",
+    "edit": "编辑",
+    "empty": "暂无数据",
+    "enabled": "启用",
+    "expand": "展开",
+    "disabled": "禁用",
+    "loadFailed": "加载失败",
+    "more": "更多",
+    "refresh": "刷新",
+    "remark": "备注",
+    "retry": "重试",
+    "save": "保存",
+    "search": "查询",
+    "status": "状态",
+    "statuses": {
+      "archived": "已归档",
+      "draft": "草稿",
+      "published": "已发布"
+    },
+    "accessModes": {
+      "public": "公开访问",
+      "password": "需要密码",
+      "member": "仅项目成员"
+    },
+    "memberRoles": {
+      "owner": "所有者",
+      "editor": "编辑者",
+      "viewer": "只读"
+    },
+    "success": "操作成功",
+    "reset": "重置",
+    "restore": "恢复上架",
+    "sort": "排序"
+  },
+  "codeCheck": {
+    "available": "可以使用",
+    "checking": "正在校验编码…",
+    "generatedHint": "留空将自动生成编码「{0}」",
+    "immutable": "创建后不可修改",
+    "suggestion": "可改用「{0}」",
+    "unavailable": "该编码不可用"
+  },
+  "picker": {
+    "projectPlaceholder": "选择项目",
+    "prototypePlaceholder": "选择原型"
+  },
+  "uploader": {
+    "dropHere": "点击或拖拽 zip 到此处",
+    "failed": "发布失败",
+    "issues": {
+      "empty": "这个文件是空的，请重新导出压缩包",
+      "notZip": "只能上传 .zip 压缩包",
+      "tooLarge": "文件超过 {0}，请精简后重传"
+    },
+    "processing": "服务端处理中 {0}%",
+    "published": "已发布",
+    "queued": "排队中，等待处理",
+    "remove": "移除",
+    "sizeHint": "支持 .zip 格式，单个包不超过 {0}",
+    "stages": {
+      "committing": "正在切换版本",
+      "extracting": "正在解压",
+      "postprocess": "正在处理资源路径",
+      "validating": "正在校验包结构"
+    },
+    "uploading": "上传中"
+  },
+  "publish": {
+    "appendHint": "发布后访问链接不变，访客刷新即看到新版本；需要回退时到原型详情的版本记录里一键回滚。",
+    "appendTitle": "上传新版本",
+    "bothBlankHint": "项目编码留空将生成「{0}」，原型编码将生成「{1}」",
+    "closedHandoff": "已交给右下角的任务浮层继续，发布不会因关闭抽屉而中断",
+    "createTitle": "上传 HTML 原型",
+    "currentVersion": "当前版本 v{0}",
+    "dismiss": "取消跟踪",
+    "duplicateHint": "服务端判定这份包与当前版本内容相同，普通发布会被拒绝；确认要再发一次就勾选强制发布。",
+    "fileRequired": "请选择要上传的 zip 包",
+    "forcePublish": "强制发布",
+    "intakeFailed": "发布请求没有送达服务端，请检查网络后重试",
+    "keepWaiting": "继续等待",
+    "linkLabel": "发布后访问链接",
+    "linkPending": "编码确定后显示完整链接",
+    "newPrototype": "＋ 新建原型",
+    "newPrototypeTitle": "新建原型并发布",
+    "noCurrentVersion": "该原型还没有发布过版本",
+    "noteLabel": "版本说明",
+    "notePlaceholder": "这次改了什么（可选）",
+    "page": {
+      "intro": "把新导出的包覆盖到已有原型：链接不变，访客刷新即看到新版本。",
+      "pickNothing": "选好项目与原型后，这里显示它的当前版本与访问地址，确认没选错再上传。",
+      "title": "上传发布"
+    },
+    "projectMode": {
+      "existing": "选择已有项目",
+      "new": "新建项目"
+    },
+    "projectRequired": "请先选择归属项目",
+    "prototypeRequired": "请先选择要发布到哪个原型",
+    "publishAction": "立即发布",
+    "publishFailed": "发布失败",
+    "published": "发布成功",
+    "sections": {
+      "file": "上传文件",
+      "pick": "选择原型",
+      "project": "归属项目",
+      "prototype": "原型信息"
+    },
+    "serverStage": "服务端处理：{0}（{1}%）",
+    "targetGoneHint": "目标原型已被删除，这份包没有可挂的原型；请重新选择项目与原型再发一次。",
+    "targetPrototype": "目标原型",
+    "versionCount": "累计发布 {0} 个版本",
+    "viewDetail": "查看原型详情",
+    "viewReport": "查看发布报告",
+    "waitFailed": "任务状态查询失败",
+    "waitTimedOut": "处理时间较长，稍后到原型详情查看结果"
+  },
+  "release": {
+    "current": "当前生效",
+    "deletedVersion": {
+      "of": "已删除 v{0}"
+    },
+    "eventTimelineEmpty": "还没有动态：发布、回滚或删除版本后，这里会出现记录。",
+    "eventTypes": {
+      "delete": "删除版本",
+      "publish": "发布",
+      "republish": "强制重发",
+      "rollback": "回滚",
+      "unpublish": "下架"
+    },
+    "report": {
+      "hide": "收起发布报告",
+      "none": "这次发布没有改写路径，也没有告警项。",
+      "title": "发布报告"
+    },
+    "rollback": {
+      "action": "回滚到此版本",
+      "confirm": "确认把该原型回滚到 v{0}？访问链接不变，访客刷新后看到的就是这个版本的内容。",
+      "done": "已回滚到 v{0}",
+      "fromTo": "从 v{0} 回到 v{1}",
+      "reason": "回滚原因（可选）",
+      "title": "回滚确认"
+    },
+    "timelineEmpty": "还没有版本记录：首次发布后这里出现时间线。",
+    "versionNote": "说明",
+    "versionNoteEmpty": "这次发布没有填写版本说明"
+  },
+  "project": {
+    "listTitle": "原型项目",
+    "listIntro": "上传静态 HTML 原型文件，立即获得可访问的在线链接，方便团队查看与评审。",
+    "emptyIntro": "还没有项目。上传一个 HTML zip 包就会一并建好项目与原型，并立刻拿到访问链接。",
+    "uploadFirst": "上传第一个 HTML 原型",
+    "filterKeyword": "项目名称 / 编码",
+    "columns": {
+      "name": "项目名称",
+      "code": "项目编码",
+      "prototypeCount": "原型数",
+      "publishedCount": "已发布",
+      "visitsLast7d": "近 7 天访问",
+      "updatedAt": "最近更新"
+    },
+    "noPrototypes": "暂无原型",
+    "createTitle": "新建项目",
+    "editTitle": "编辑项目",
+    "fields": {
+      "name": "项目名称",
+      "code": "项目编码",
+      "description": "项目说明"
+    },
+    "nameRequired": "请输入项目名称",
+    "archiveConfirm": "确认归档项目「{0}」？归档后其下所有原型链接将立即不可访问，版本产物保留。",
+    "restoreConfirm": "确认恢复上架项目「{0}」？恢复后其下已发布原型的链接重新可访问。",
+    "deleteConfirm": "确认删除项目「{0}」？将级联删除其下全部原型与版本产物，不可恢复。",
+    "detailNotFound": "缺少项目 id，请从项目列表进入",
+    "stats": {
+      "prototypes": "原型总数",
+      "published": "已发布",
+      "draft": "草稿",
+      "archived": "已归档",
+      "visits7d": "近 7 天访问量",
+      "members": "成员数"
+    },
+    "sections": {
+      "basic": "基本信息",
+      "members": "项目成员",
+      "prototypes": "原型列表",
+      "activity": "项目动态"
+    },
+    "basic": {
+      "createdBy": "创建人",
+      "createdAt": "创建时间",
+      "lastPublishedAt": "最近发布时间",
+      "archivedAt": "归档时间"
+    },
+    "members": {
+      "empty": "暂无成员",
+      "selectPlaceholder": "选择用户加入项目",
+      "save": "保存成员",
+      "ownerTip": "创建人默认是所有者且不会被移除；成员角色一期仅记录展示，不据此做差异授权。",
+      "updated": "成员已更新",
+      "usersLoadFailed": "用户列表加载失败"
+    }
+  },
+  "prototype": {
+    "createTitle": "新建原型",
+    "editTitle": "编辑原型",
+    "fields": {
+      "name": "原型名称",
+      "code": "原型编码",
+      "description": "说明"
+    },
+    "nameRequired": "请输入原型名称",
+    "filterKeyword": "原型名称 / 编码",
+    "columns": {
+      "name": "原型名称",
+      "code": "原型编码",
+      "accessUrl": "访问地址",
+      "currentVersion": "当前版本",
+      "policy": "访问策略",
+      "updatedAt": "最近更新"
+    },
+    "listEmpty": "暂无原型：新建原型后即获得一条可分享的访问链接，发布后地址即可访问。",
+    "archiveConfirm": "确认归档原型「{0}」？仅该原型的链接不可访问，同一项目下其它原型不受影响。",
+    "restoreConfirm": "确认恢复上架原型「{0}」？恢复后该原型已发布版本的链接重新可访问。",
+    "deleteConfirm": "确认删除原型「{0}」？将级联删除其全部版本产物，不可恢复。",
+    "detailNotFound": "缺少原型 id，请从项目详情页进入",
+    "sections": {
+      "access": "访问信息",
+      "basic": "基本信息",
+      "currentVersion": "当前版本",
+      "versions": "版本记录",
+      "accessLog": "访问记录",
+      "members": "可访问成员"
+    },
+    "accessLog": {
+      "hint": "最近 {0} 条访问",
+      "more": "查看更多"
+    },
+    "fieldsInfo": {
+      "accessUrl": "访问地址",
+      "policy": "访问策略",
+      "project": "所属项目",
+      "createdAt": "创建时间",
+      "updatedAt": "最近更新",
+      "visits7d": "近 7 天访问量"
+    },
+    "policy": {
+      "edit": "修改策略",
+      "passwordLabel": "访问密码",
+      "passwordRule": "至少 6 位",
+      "passwordKeep": "留空则沿用现有密码",
+      "switchHint": "修改模式或密码会让访客已保存的解锁状态立即失效，需要重新验证。",
+      "updated": "访问策略已更新",
+      "memberNote": "「仅项目成员」档的可访问人就是所属项目的成员，随项目成员变化。"
+    },
+    "version": {
+      "notPublished": "尚未发布：上传 HTML zip 并发布后，这里显示当前版本。",
+      "no": "版本 v{0}",
+      "fileCount": "文件数",
+      "totalBytes": "体积",
+      "publishedBy": "发布人",
+      "publishedAt": "发布时间"
+    },
+    "emptyHints": {
+      "accessLog": "还没有访问记录：原型被访问后这里出现最近明细。"
+    },
+    "members": {
+      "empty": "所属项目还没有成员；成员档将无人可访问。"
+    },
+    "openLink": "立即访问",
+    "switch": "切换原型"
+  },
+  "accesslog": {
+    "page": {
+      "title": "访问记录",
+      "intro": "原型访问的明细与趋势；原型已删除或编码不存在时以「无效链接」呈现。"
+    },
+    "noPermission": "缺少查看访问记录的权限（proto:accesslog:list）。",
+    "filters": {
+      "title": "筛选",
+      "today": "今天",
+      "last7d": "近 7 天",
+      "last30d": "近 30 天",
+      "custom": "自定义",
+      "resultPlaceholder": "全部结果",
+      "keywordPlaceholder": "搜索 IP 或浏览器 UA",
+      "reset": "重置"
+    },
+    "scope": {
+      "title": "当前范围",
+      "project": "项目",
+      "prototype": "原型"
+    },
+    "metrics": {
+      "pv": "PV · 入口访问",
+      "uv": "UV · 独立访客",
+      "denied": "被拒次数",
+      "botPv": "爬虫请求",
+      "invalidPv": "无效链接访问"
+    },
+    "trend": {
+      "title": "近 {0} 天 PV / UV 趋势",
+      "pv": "PV",
+      "uv": "UV"
+    },
+    "results": {
+      "ok": "正常",
+      "denied_401": "需密码",
+      "denied_403": "无权限",
+      "not_found": "不存在"
+    },
+    "devices": {
+      "desktop": "桌面端",
+      "mobile": "移动端",
+      "tablet": "平板",
+      "bot": "爬虫"
+    },
+    "invalidLink": "无效链接",
+    "anonymous": "匿名",
+    "columns": {
+      "createdAt": "时间",
+      "projectName": "所属项目",
+      "prototype": "原型",
+      "versionNo": "版本",
+      "path": "访问路径",
+      "result": "结果",
+      "visitor": "访问者",
+      "env": "浏览器/系统/设备",
+      "referer": "来源"
+    }
+  },
+  "workspace": {
+    "title": "工作台",
+    "upload": "上传 HTML 原型",
+    "stats": {
+      "projects": "项目数",
+      "prototypes": "原型数",
+      "releases": "本周发布次数",
+      "visits": "近 7 天访问量",
+      "visitsCompare": "较上个 7 天 {0}",
+      "visitsPrevZero": "上个 7 天 0 次"
+    },
+    "recentPrototypes": {
+      "title": "最近更新的原型",
+      "empty": "还没有原型：上传第一个 HTML 原型后，这里会出现最近更新的 5 个。",
+      "visits": "近 7 天访问 {0} 次",
+      "ofProject": "所属项目 {0}"
+    },
+    "recentEvents": {
+      "title": "最近动态"
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "tabs": {
+      "security": "账号安全",
+      "user": "用户管理",
+      "role": "角色管理",
+      "menu": "菜单管理",
+      "log": "日志"
+    }
+  },
+  "account": {
+    "profileTitle": "个人资料",
+    "profileDesc": "修改姓名、邮箱、电话与头像",
+    "passwordTitle": "修改密码",
+    "passwordDesc": "修改成功后所有设备都需要重新登录",
+    "forceTitle": "首次登录需要修改密码",
+    "forceDesc": "为了账号安全，请先设置新密码",
+    "fields": {
+      "realName": "姓名",
+      "email": "邮箱",
+      "phone": "电话",
+      "avatar": "头像地址",
+      "username": "用户名",
+      "oldPassword": "当前密码",
+      "newPassword": "新密码",
+      "confirmPassword": "确认新密码"
+    },
+    "passwordRule": "至少 8 位，且包含大写、小写、数字、符号中的至少 3 类",
+    "passwordMismatch": "两次输入的新密码不一致",
+    "emailInvalid": "邮箱格式不正确",
+    "passwordChanged": "密码修改成功，请使用新密码重新登录",
+    "profileUpdated": "资料已更新",
+    "logout": "退出登录",
+    "lastLogin": "上次登录",
+    "neverLoggedIn": "尚未登录过"
+  },
+  "user": {
+    "columns": {
+      "username": "用户名",
+      "realName": "姓名",
+      "email": "邮箱",
+      "roles": "角色",
+      "status": "状态",
+      "lastLoginAt": "最近登录"
+    },
+    "filter": {
+      "keywordPlaceholder": "用户名 / 姓名 / 邮箱"
+    },
+    "createTitle": "新建用户",
+    "editTitle": "编辑用户",
+    "fields": {
+      "username": "用户名",
+      "realName": "姓名",
+      "email": "邮箱",
+      "phone": "电话",
+      "roles": "角色",
+      "status": "状态",
+      "remark": "备注"
+    },
+    "usernameRule": "3-32 位，仅限字母、数字、下划线与点",
+    "createPasswordTip": "初始密码由系统随机生成，创建成功后仅展示一次",
+    "assignRolesTitle": "分配角色",
+    "resetPassword": "重置密码",
+    "resetPasswordConfirm": "将为“{0}”生成新的随机密码，该用户当前所有登录会话立即失效。确认继续？",
+    "toggleConfirm": "确认{0}用户“{1}”？禁用后其在线会话立即失效。",
+    "deleteAction": "删除用户",
+    "deleteConfirm": "确认删除用户“{0}”？删除后其链接与登录立即失效。",
+    "builtIn": "内置",
+    "passwordResult": {
+      "createdTitle": "用户已创建",
+      "resetTitle": "密码已重置",
+      "copyTip": "该密码只显示一次，请抄录后交给本人",
+      "reveal": "点击查看完整值",
+      "hide": "隐藏密码",
+      "ack": "我已抄录，关闭"
+    }
+  },
+  "role": {
+    "listTitle": "角色列表",
+    "createTitle": "新建角色",
+    "columns": {
+      "name": "名称",
+      "code": "编码",
+      "userCount": "用户数",
+      "dataScope": "数据范围"
+    },
+    "fields": {
+      "name": "角色名称",
+      "code": "角色编码",
+      "dataScope": "数据范围",
+      "sort": "排序",
+      "status": "状态",
+      "remark": "备注"
+    },
+    "builtIn": "内置",
+    "builtInCodeTip": "内置角色的编码不可修改，且不可删除",
+    "codeRule": "编码以小写字母开头，只能包含小写字母、数字与下划线（2–64 位）",
+    "dataScopes": {
+      "all": "全部项目",
+      "member": "我参与的",
+      "own": "我创建的"
+    },
+    "permissionsTitle": "权限码",
+    "menuTitle": "菜单权限",
+    "panelEmpty": "从左侧选择角色开始配置",
+    "saveBasic": "保存基本信息",
+    "savePermissions": "保存授权",
+    "deleteConfirm": "确认删除角色“{0}”？有用户绑定时会被拒绝。",
+    "noAssignPerm": "当前账号无“角色授权”权限，仅可编辑基本信息",
+    "modules": {
+      "dashboard": "工作台",
+      "proto": "原型业务",
+      "system": "系统管理"
+    }
+  },
+  "menu": {
+    "createTitle": "新建菜单",
+    "editTitle": "编辑菜单",
+    "addChild": "新增子项",
+    "columns": {
+      "title": "名称",
+      "type": "类型",
+      "path": "路由",
+      "component": "组件",
+      "authCode": "权限码"
+    },
+    "fields": {
+      "type": "类型",
+      "pid": "上级菜单",
+      "name": "路由名称",
+      "title": "标题",
+      "path": "路由路径",
+      "component": "组件路径",
+      "icon": "图标",
+      "authCode": "权限码",
+      "iframeSrc": "内嵌地址",
+      "linkUrl": "外链地址",
+      "pageOptions": "页面选项",
+      "hideInMenu": "侧栏隐藏",
+      "keepAlive": "页面缓存",
+      "affixTab": "固定标签",
+      "menuVisibleWithForbidden": "可见但拦截",
+      "status": "状态"
+    },
+    "types": {
+      "catalog": "目录",
+      "menu": "菜单",
+      "button": "按钮",
+      "embedded": "内嵌",
+      "link": "外链"
+    },
+    "componentTip": "相对 src/views 的路径，如 /system/setting/index（不带 .vue）",
+    "urlRule": "请填写合法的 URL（以 http:// 或 https:// 开头）",
+    "rootOption": "顶级",
+    "deleteConfirm": "确认删除“{0}”？存在子节点时会被拒绝。"
+  },
+  "log": {
+    "tabs": {
+      "login": "登录日志",
+      "oper": "操作日志"
+    },
+    "loginColumns": {
+      "createdAt": "时间",
+      "username": "账号",
+      "ip": "IP",
+      "userAgent": "客户端",
+      "loginType": "类型",
+      "success": "结果",
+      "failReason": "失败原因"
+    },
+    "operColumns": {
+      "createdAt": "时间",
+      "username": "操作人",
+      "module": "模块",
+      "resource": "资源",
+      "action": "动作",
+      "path": "接口",
+      "ip": "IP",
+      "duration": "耗时",
+      "errorMessage": "错误"
+    },
+    "filter": {
+      "usernamePlaceholder": "账号",
+      "actionPlaceholder": "动作",
+      "resourceType": {
+        "label": "资源类型",
+        "options": {
+          "project": "项目",
+          "prototype": "原型",
+          "release": "版本",
+          "user": "用户",
+          "role": "角色",
+          "menu": "菜单"
+        }
+      },
+      "dateRange": "时间范围"
+    },
+    "result": {
+      "success": "成功",
+      "fail": "失败"
+    },
+    "loginTypes": {
+      "login": "登录",
+      "logout": "登出",
+      "refresh_fail": "刷新失败"
+    }
+  },
+  "profile": {
+    "title": "个人中心",
+    "desc": "管理你的资料与登录密码"
+  }
+}

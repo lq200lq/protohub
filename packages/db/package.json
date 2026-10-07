@@ -1,0 +1,38 @@
+{
+  "name": "@protohub/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "generate": "prisma generate",
+    "migrate": "node scripts/apply-migrations.mjs",
+    "seed": "tsx src/seed.ts",
+    "seed-admin": "tsx src/seed-admin.ts",
+    "studio": "prisma studio",
+    "typecheck": "tsc --noEmit --skipLibCheck",
+    "test": "vitest run --passWithNoTests",
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@protohub/shared": "workspace:*",
+    "@prisma/client": "catalog:",
+    "argon2": "catalog:",
+    "dotenv": "catalog:"
+  },
+  "devDependencies": {
+    "@vben/tsconfig": "workspace:*",
+    "@types/node": "catalog:",
+    "prisma": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts"
+}

@@ -1,0 +1,458 @@
+// =============================================================================
+// ProtoHub Prisma schema —— 与 docs/数据库设计.md §4 逐表对齐（权威：文档先行，
+// 本 schema 为可执行权威/迁移实际来源；任何表结构变更先改文档再改这里）。
+//
+// 约定：
+//   - 表名/列名一律 snake_case，与文档 DDL 完全一致。
+//   - Prisma 无法表达的条件索引（WHERE deleted_at IS NULL / status IN (...)）、
+//     表达式索引（lower(username)）与全部 CHECK 约束，写在首个迁移的原生 SQL 中
+//     （prisma/migrations/.../migration.sql 尾部 "NATIVE SQL" 段落），勿在此处弱化设计。
+//   - 索引命名 uk_/idx_/fk_ 前缀，见文档 §1。
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------------------------------------
+// 4.1 权限体系（sys_）
+// -----------------------------------------------------------------------------
+
+/// 4.1.1 用户（软删除；uk_sys_user_username 为 lower(username) 条件唯一索引 → 迁移原生 SQL；
+/// idx_sys_user_status 部分索引 → 迁移原生 SQL）
+model SysUser {
+  id                  BigInt    @id @default(autoincrement())
+  username            String    @db.VarChar(50)
+  passwordHash        String    @map("password_hash") @db.Text
+  realName            String    @map("real_name") @db.VarChar(50)
+  email               String?   @db.VarChar(120)
+  phone               String?   @db.VarChar(20)
+  avatar              String?   @db.VarChar(500)
+  /// 1 启用 / 0 禁用
+  status              Int       @default(1) @db.SmallInt
+  /// 会话撤销用，见权限模型设计 §5.4
+  tokenVersion        Int       @default(0) @map("token_version")
+  /// 首登强制改密
+  forcePasswordChange Boolean   @default(false) @map("force_password_change")
+  /// local|ldap|sso（预留 Q-5）
+  authProvider        String    @default("local") @map("auth_provider") @db.VarChar(20)
+  lastLoginAt         DateTime? @map("last_login_at") @db.Timestamptz(6)
+  lastLoginIp         String?   @map("last_login_ip") @db.Inet
+  remark              String?   @db.VarChar(200)
+  createdBy           BigInt?   @map("created_by")
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedBy           BigInt?   @map("updated_by")
+  updatedAt           DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt           DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  userRoles             SysUserRole[]
+  projectsCreated       ProtoProject[]      @relation("ProtoProjectCreatedBy")
+  prototypesCreated     ProtoPrototype[]    @relation("ProtoPrototypeCreatedBy")
+  projectMembers        ProtoProjectMember[]
+  releasesCreated       ProtoRelease[]      @relation("ProtoReleaseCreatedBy")
+  releaseEventsOperated ProtoReleaseEvent[] @relation("ProtoReleaseEventOperator")
+  uploadTasksCreated    ProtoUploadTask[]   @relation("ProtoUploadTaskCreatedBy")
+
+  @@map("sys_user")
+}
+
+/// 4.1.2 角色（软删除；uk_sys_role_code 条件唯一索引 → 迁移原生 SQL；
+/// data_scope CHECK in ('all','member','own') → 迁移原生 SQL）
+model SysRole {
+  id        BigInt    @id @default(autoincrement())
+  /// super_admin|admin|publisher|viewer|自定义
+  code      String    @db.VarChar(50)
+  name      String    @db.VarChar(50)
+  /// 多角色取最宽；check (data_scope in ('all','member','own')) → 迁移原生 SQL
+  dataScope String    @default("member") @map("data_scope") @db.VarChar(20)
+  /// 内置角色 code 不可改、不可删（C-1）
+  builtIn   Boolean   @default(false) @map("built_in")
+  sort      Int       @default(0)
+  status    Int       @default(1) @db.SmallInt
+  remark    String?   @db.VarChar(200)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  userRoles       SysUserRole[]
+  rolePermissions SysRolePermission[]
+  roleMenus       SysRoleMenu[]
+
+  @@map("sys_role")
+}
+
+/// 4.1.3 用户-角色（复合主键，无 id）
+model SysUserRole {
+  userId    BigInt   @map("user_id")
+  roleId    BigInt   @map("role_id")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user SysUser @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_sys_user_role_user")
+  role SysRole @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_sys_user_role_role")
+
+  @@id([userId, roleId])
+  @@index([roleId], map: "idx_sys_user_role_role")
+  @@map("sys_user_role")
+}
+
+/// 4.1.4 权限码字典（与代码常量同步，见权限模型设计 §3；字典表无软删除/审计人）
+model SysPermission {
+  id        BigInt   @id @default(autoincrement())
+  /// proto:prototype:publish
+  code      String   @unique(map: "uk_sys_permission_code") @db.VarChar(80)
+  name      String   @db.VarChar(80)
+  /// dashboard|proto|system
+  module    String   @db.VarChar(50)
+  sort      Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  rolePermissions SysRolePermission[]
+
+  @@map("sys_permission")
+}
+
+/// 4.1.5 角色-权限（复合主键）
+model SysRolePermission {
+  roleId       BigInt   @map("role_id")
+  permissionId BigInt   @map("permission_id")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  role       SysRole       @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_sys_role_permission_role")
+  permission SysPermission @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_sys_role_permission_permission")
+
+  @@id([roleId, permissionId])
+  @@index([permissionId], map: "idx_sys_role_permission_perm")
+  @@map("sys_role_permission")
+}
+
+/// 4.1.6 菜单/按钮树（驱动 /menu/all 与前端动态路由；
+/// uk_sys_menu_auth_code 条件唯一索引 WHERE auth_code IS NOT NULL → 迁移原生 SQL；
+/// type CHECK → 迁移原生 SQL）
+model SysMenu {
+  id                           BigInt   @id @default(autoincrement())
+  pid                          BigInt?
+  /// catalog|menu|button|embedded|link（check → 迁移原生 SQL）
+  type                         String   @db.VarChar(20)
+  /// 路由 name（PascalCase，全局唯一）
+  name                         String   @unique(map: "uk_sys_menu_name") @db.VarChar(80)
+  /// 显示标题
+  title                        String   @db.VarChar(80)
+  /// 路由 path（button 为空）
+  path                         String?  @db.VarChar(200)
+  /// 相对 apps/admin/src/views 的路径，或 'BasicLayout'/'IFrameView'
+  component                    String?  @db.VarChar(200)
+  /// button 携带的权限码（条件唯一索引 uk_sys_menu_auth_code → 迁移原生 SQL）
+  authCode                     String?  @map("auth_code") @db.VarChar(80)
+  /// iconify 名，如 lucide:folder-code
+  icon                         String?  @db.VarChar(80)
+  /// → meta.order
+  sort                         Int      @default(0)
+  /// 1 启用 / 0 停用（停用不下发）
+  status                       Int      @default(1) @db.SmallInt
+  keepAlive                    Boolean  @default(false) @map("keep_alive")
+  affixTab                     Boolean  @default(false) @map("affix_tab")
+  hideInMenu                   Boolean  @default(false) @map("hide_in_menu")
+  menuVisibleWithForbidden     Boolean  @default(false) @map("menu_visible_with_forbidden")
+  /// 逗号分隔角色，→ meta.authority
+  authority                    String?  @db.VarChar(200)
+  ignoreAccess                 Boolean  @default(false) @map("ignore_access")
+  openInNewWindow              Boolean  @default(false) @map("open_in_new_window")
+  iframeSrc                    String?  @map("iframe_src") @db.VarChar(500)
+  linkUrl                      String?  @map("link_url") @db.VarChar(500)
+  badge                        String?  @db.VarChar(20)
+  badgeType                    String?  @map("badge_type") @db.VarChar(20)
+  createdAt                    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                    DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  parent   SysMenu?    @relation("SysMenuTree", fields: [pid], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_sys_menu_pid")
+  children SysMenu[]   @relation("SysMenuTree")
+  roleMenus  SysRoleMenu[]
+
+  @@index([pid, sort], map: "idx_sys_menu_pid")
+  @@map("sys_menu")
+}
+
+/// 4.1.7 角色-菜单（复合主键）
+model SysRoleMenu {
+  roleId BigInt @map("role_id")
+  menuId BigInt @map("menu_id")
+
+  role SysRole @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_sys_role_menu_role")
+  menu SysMenu @relation(fields: [menuId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_sys_role_menu_menu")
+
+  @@id([roleId, menuId])
+  @@index([menuId], map: "idx_sys_role_menu_menu")
+  @@map("sys_role_menu")
+}
+
+/// 4.1.8 登录日志（保留 180 天；user_id 无外键，允许记录已删用户）
+model SysLoginLog {
+  id         BigInt   @id @default(autoincrement())
+  userId     BigInt?  @map("user_id")
+  username   String   @db.VarChar(50)
+  /// login|logout|refresh_fail（check → 迁移原生 SQL）
+  loginType  String   @default("login") @map("login_type") @db.VarChar(20)
+  success    Boolean
+  failReason String?  @map("fail_reason") @db.VarChar(120)
+  ip         String?  @db.Inet
+  userAgent  String?  @map("user_agent") @db.VarChar(500)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([userId, createdAt(sort: Desc)], map: "idx_sys_login_log_user")
+  @@index([createdAt], map: "idx_sys_login_log_created")
+  @@map("sys_login_log")
+}
+
+/// 4.1.9 操作日志（审计，保留 180 天；detail 脱敏硬约束见文档 §4.1 表下注）
+model SysOperLog {
+  id           BigInt   @id @default(autoincrement())
+  userId       BigInt?  @map("user_id")
+  username     String?  @db.VarChar(50)
+  module       String   @db.VarChar(50)
+  /// create|update|delete|publish|rollback|policy...
+  action       String   @db.VarChar(50)
+  /// project|release|user|role|menu
+  resourceType String?  @map("resource_type") @db.VarChar(50)
+  resourceId   String?  @map("resource_id") @db.VarChar(64)
+  resourceName String?  @map("resource_name") @db.VarChar(200)
+  method       String?  @db.VarChar(10)
+  path         String?  @db.VarChar(300)
+  /// 变更差异，必须脱敏（不写 password_hash / 密码明文 / refreshToken / 完整 accessToken）
+  detail       Json?
+  ip           String?  @db.Inet
+  success      Boolean  @default(true)
+  errorMessage String?  @map("error_message") @db.VarChar(500)
+  durationMs   Int?     @map("duration_ms")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([resourceType, resourceId, createdAt(sort: Desc)], map: "idx_sys_oper_log_resource")
+  @@index([createdAt], map: "idx_sys_oper_log_created")
+  @@map("sys_oper_log")
+}
+
+// -----------------------------------------------------------------------------
+// 4.2 业务（proto_）
+// -----------------------------------------------------------------------------
+
+/// 4.2.1 项目（原型的容器；状态不落库、由原型聚合派生——决策 D-22；
+/// uk_proto_project_code / idx_proto_project_created_by 条件索引 → 迁移原生 SQL；
+/// code 格式 CHECK → 迁移原生 SQL）
+model ProtoProject {
+  id          BigInt    @id @default(autoincrement())
+  name        String    @db.VarChar(80)
+  /// 项目编码，访问路径第一段；check (code ~ '^[a-z0-9]+(-[a-z0-9]+)*$') → 迁移原生 SQL
+  code        String    @db.VarChar(63)
+  description String?   @db.VarChar(500)
+  /// 非空 = 已归档（项目层唯一的状态字段）
+  archivedAt  DateTime? @map("archived_at") @db.Timestamptz(6)
+  createdBy   BigInt    @map("created_by")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedBy   BigInt?   @map("updated_by")
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  createdByUser SysUser              @relation("ProtoProjectCreatedBy", fields: [createdBy], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_proto_project_created_by")
+  members       ProtoProjectMember[]
+  prototypes    ProtoPrototype[]
+
+  @@index([archivedAt], map: "idx_proto_project_archived")
+  @@map("proto_project")
+}
+
+/// 4.2.2 原型（分享与鉴权的最小单位；
+/// uk_proto_prototype_code / idx_proto_prototype_status 条件索引、
+/// code/status/access_mode CHECK、ck_proto_prototype_pwd → 迁移原生 SQL）
+model ProtoPrototype {
+  id BigInt @id @default(autoincrement())
+  /// 项目级联删除
+  projectId   BigInt  @map("project_id")
+  name        String  @db.VarChar(80)
+  /// 原型编码，访问路径第二段（项目内唯一）；code 格式 CHECK → 迁移原生 SQL
+  code        String  @db.VarChar(63)
+  description String? @db.VarChar(500)
+  /// draft|published|archived（check → 迁移原生 SQL）
+  status      String  @default("draft") @db.VarChar(20)
+  /// public|password|member（check → 迁移原生 SQL）
+  accessMode  String  @default("public") @map("access_mode") @db.VarChar(20)
+  /// access_mode='password' 必填（argon2id）；ck_proto_prototype_pwd → 迁移原生 SQL
+  passwordHash String? @map("password_hash") @db.Text
+  /// 改模式/改密码时 +1，旧解锁 cookie 立即失效（D-07）
+  policyVersion Int      @default(1) @map("policy_version")
+  /// 当前生效版本指针；循环外键 fk_proto_prototype_current_release（on delete set null）
+  currentReleaseId BigInt? @map("current_release_id")
+  /// 项目内展示顺序
+  sort             Int      @default(0)
+  firstPublishedAt DateTime? @map("first_published_at") @db.Timestamptz(6)
+  /// 当前生效版本的生效时间（回滚也会更新）
+  publishedAt      DateTime? @map("published_at") @db.Timestamptz(6)
+  archivedAt       DateTime? @map("archived_at") @db.Timestamptz(6)
+  createdBy        BigInt    @map("created_by")
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedBy        BigInt?   @map("updated_by")
+  updatedAt        DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  project     ProtoProject  @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_proto_prototype_project")
+  createdByUser SysUser     @relation("ProtoPrototypeCreatedBy", fields: [createdBy], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_proto_prototype_created_by")
+  currentRelease ProtoRelease? @relation("PrototypeCurrentRelease", fields: [currentReleaseId], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "fk_proto_prototype_current_release")
+
+  releases      ProtoRelease[]      @relation("PrototypeReleases")
+  releaseEvents ProtoReleaseEvent[]
+  uploadTasks   ProtoUploadTask[]
+
+  @@index([projectId, sort], map: "idx_proto_prototype_project")
+  @@map("proto_prototype")
+}
+
+/// 4.2.3 项目成员（数据权限依据；范围停在项目层；
+/// member_role CHECK → 迁移原生 SQL）
+model ProtoProjectMember {
+  projectId  BigInt   @map("project_id")
+  userId     BigInt   @map("user_id")
+  /// owner|editor|viewer（check → 迁移原生 SQL）
+  memberRole String   @default("viewer") @map("member_role") @db.VarChar(20)
+  createdBy  BigInt?  @map("created_by")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  project ProtoProject @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_proto_project_member_project")
+  user    SysUser      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_proto_project_member_user")
+
+  @@id([projectId, userId])
+  @@index([userId], map: "idx_proto_project_member_user")
+  @@map("proto_project_member")
+}
+
+/// 4.2.4 发布版本（不可变快照；挂在原型下；uk_proto_release_version 是无条件唯一索引——
+/// 并发发布抢 version_no 的最终防线，故不带 deleted_at 条件）
+model ProtoRelease {
+  id          BigInt    @id @default(autoincrement())
+  /// 原型级联删除
+  prototypeId BigInt    @map("prototype_id")
+  /// 原型内递增，从 1 开始
+  versionNo   Int       @map("version_no")
+  /// ready|broken|deleted（check → 迁移原生 SQL）
+  status      String    @default("ready") @db.VarChar(20)
+  /// releases/{projectId}/{prototypeId}/{releaseId}
+  storageKey  String    @map("storage_key") @db.VarChar(300)
+  entryFile   String    @default("index.html") @map("entry_file") @db.VarChar(200)
+  /// 上传 zip 的 sha256
+  sourceHash  String    @map("source_hash") @db.VarChar(64)
+  /// 产物指纹（文件清单排序后再 sha256）
+  contentHash String    @map("content_hash") @db.VarChar(64)
+  /// zip 字节数（bigint，不用 integer）
+  sourceSize  BigInt    @map("source_size")
+  fileCount   Int       @map("file_count")
+  totalBytes  BigInt    @map("total_bytes")
+  manifest    Json      @default(dbgenerated("'{}'::jsonb")) @db.JsonB
+  note        String?   @db.VarChar(300)
+  createdBy   BigInt    @map("created_by")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  prototype     ProtoPrototype @relation("PrototypeReleases", fields: [prototypeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_proto_release_prototype")
+  createdByUser SysUser        @relation("ProtoReleaseCreatedBy", fields: [createdBy], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_proto_release_created_by")
+  /// 循环外键的另一端：被哪个原型作为当前生效版本引用
+  currentOfPrototypes ProtoPrototype[] @relation("PrototypeCurrentRelease")
+
+  @@unique([prototypeId, versionNo], map: "uk_proto_release_version")
+  @@index([prototypeId, createdAt(sort: Desc)], map: "idx_proto_release_prototype")
+  @@index([prototypeId, sourceHash], map: "idx_proto_release_hash")
+  @@map("proto_release")
+}
+
+/// 4.2.5 版本事件（发布/回滚时间线；不冗余 project_id，见文档注；
+/// event_type CHECK → 迁移原生 SQL；from/to_release_id 刻意不建外键）
+model ProtoReleaseEvent {
+  id            BigInt   @id @default(autoincrement())
+  /// 原型级联删除
+  prototypeId   BigInt   @map("prototype_id")
+  /// publish|rollback|unpublish|republish|delete_version（check → 迁移原生 SQL）
+  eventType     String   @map("event_type") @db.VarChar(20)
+  fromReleaseId BigInt?  @map("from_release_id")
+  toReleaseId   BigInt?  @map("to_release_id")
+  operatorId    BigInt   @map("operator_id")
+  reason        String?  @db.VarChar(300)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  prototype   ProtoPrototype @relation(fields: [prototypeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_proto_release_event_prototype")
+  operator    SysUser        @relation("ProtoReleaseEventOperator", fields: [operatorId], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_proto_release_event_operator")
+
+  @@index([prototypeId, createdAt(sort: Desc)], map: "idx_proto_release_event_prototype")
+  @@map("proto_release_event")
+}
+
+/// 4.2.6 上传任务（异步发布；idx_proto_upload_task_todo 部分索引 WHERE status IN (...) →
+/// 迁移原生 SQL；status/progress CHECK → 迁移原生 SQL；release_id 不建外键）
+model ProtoUploadTask {
+  id          BigInt    @id @default(autoincrement())
+  /// 非空：轻校验通过后、创建任务之前，同事务先落库 project/prototype（draft）
+  prototypeId BigInt    @map("prototype_id")
+  /// pending|processing|success|failed|canceled（check → 迁移原生 SQL）
+  status      String    @default("pending") @db.VarChar(20)
+  /// 0..100（check between 0 and 100 → 迁移原生 SQL）
+  progress    Int       @default(0) @db.SmallInt
+  /// validating|extracting|postprocess|committing
+  stage       String?   @db.VarChar(30)
+  sourceName  String    @map("source_name") @db.VarChar(300)
+  sourceSize  BigInt    @map("source_size")
+  /// 版本说明的承载位：release 行要到机制 §3.1 第 3 步才建，Worker 只能从这条任务读用户当时填的话。
+  /// §4.2.6 原列清单无此列，见迭代实施计划 §9 DEV-18。
+  note        String?   @db.VarChar(300)
+  tempKey     String?   @map("temp_key") @db.VarChar(300)
+  releaseId   BigInt?   @map("release_id")
+  errorCode   String?   @map("error_code") @db.VarChar(40)
+  errorMessage String?  @map("error_message") @db.VarChar(500)
+  warnings    Json      @default(dbgenerated("'[]'::jsonb")) @db.JsonB
+  /// 接口设计 §1.3 的 Idempotency-Key（10 分钟内重复提交返回首次结果）；窗口外的同键可再次使用，
+  /// 所以是普通索引而不是唯一索引。见计划 §9 DEV-15。
+  idempotencyKey String? @map("idempotency_key") @db.VarChar(64)
+  /// 机制 §3.2「超时重置为 pending 并重试一次」的计数，check 0..1 把"只重试一次"落在库里。
+  /// 见计划 §9 DEV-16。
+  retryCount  Int       @default(0) @map("retry_count") @db.SmallInt
+  createdBy   BigInt    @map("created_by")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  startedAt   DateTime? @map("started_at") @db.Timestamptz(6)
+  finishedAt  DateTime? @map("finished_at") @db.Timestamptz(6)
+
+  prototype     ProtoPrototype @relation(fields: [prototypeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_proto_upload_task_prototype")
+  createdByUser SysUser        @relation("ProtoUploadTaskCreatedBy", fields: [createdBy], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_proto_upload_task_created_by")
+
+  @@index([prototypeId, createdAt(sort: Desc)], map: "idx_proto_upload_task_prototype")
+  @@map("proto_upload_task")
+}
+
+/// 4.2.7 访问记录（最大表；prototype_id / release_id / user_id 刻意不建外键——全库唯一两处
+/// （连同 user_id）不建外键的关联，见文档 §2/§5；result CHECK → 迁移原生 SQL）
+model ProtoAccessLog {
+  id          BigInt   @id @default(autoincrement())
+  /// 可空且无外键：编码不存在 / 请求在途中原型被删时没有可指向的行
+  prototypeId BigInt?  @map("prototype_id")
+  /// 刻意不建外键：日志是统计事实，不约束业务删除
+  releaseId   BigInt?  @map("release_id")
+  /// 形如 crm/crm-p01，即使 prototype_id 为空也能定位访问路径
+  routeKey    String   @map("route_key") @db.VarChar(140)
+  path        String   @db.VarChar(500)
+  /// ok|denied_401|denied_403|not_found（check → 迁移原生 SQL）
+  result      String   @db.VarChar(20)
+  /// member 档已登录时记录（无外键）
+  userId      BigInt?  @map("user_id")
+  ip          String?  @db.Inet
+  ua          String?  @db.VarChar(500)
+  browser     String?  @db.VarChar(40)
+  os          String?  @db.VarChar(40)
+  /// desktop|mobile|tablet|bot
+  device      String?  @db.VarChar(20)
+  referer     String?  @db.VarChar(500)
+  isBot       Boolean  @default(false) @map("is_bot")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([prototypeId, createdAt(sort: Desc)], map: "idx_proto_access_log_prototype")
+  @@index([createdAt], map: "idx_proto_access_log_created")
+  @@map("proto_access_log")
+}

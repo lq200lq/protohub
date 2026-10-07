@@ -1,0 +1,575 @@
+{
+  "common": {
+    "action": "Actions",
+    "archive": "Archive",
+    "cancel": "Cancel",
+    "collapse": "Show less",
+    "confirm": "OK",
+    "copy": "Copy",
+    "copySuccess": "Copied to clipboard",
+    "copyFailed": "Copy failed, please copy manually",
+    "create": "Create",
+    "delete": "Delete",
+    "detail": "View detail",
+    "edit": "Edit",
+    "empty": "No data",
+    "enabled": "Enabled",
+    "expand": "Show more",
+    "disabled": "Disabled",
+    "loadFailed": "Failed to load",
+    "more": "More",
+    "refresh": "Refresh",
+    "remark": "Remark",
+    "retry": "Retry",
+    "save": "Save",
+    "search": "Search",
+    "status": "Status",
+    "statuses": {
+      "archived": "Archived",
+      "draft": "Draft",
+      "published": "Published"
+    },
+    "accessModes": {
+      "public": "Public",
+      "password": "Password required",
+      "member": "Project members only"
+    },
+    "memberRoles": {
+      "owner": "Owner",
+      "editor": "Editor",
+      "viewer": "Viewer"
+    },
+    "success": "Done",
+    "reset": "Reset",
+    "restore": "Restore",
+    "sort": "Sort"
+  },
+  "codeCheck": {
+    "available": "Available",
+    "checking": "Checking code…",
+    "generatedHint": "Leave blank to auto-generate \"{0}\"",
+    "immutable": "Cannot be changed after creation",
+    "suggestion": "Try \"{0}\" instead",
+    "unavailable": "This code is not available"
+  },
+  "picker": {
+    "projectPlaceholder": "Select project",
+    "prototypePlaceholder": "Select prototype"
+  },
+  "uploader": {
+    "dropHere": "Click or drag a zip here",
+    "failed": "Publish failed",
+    "issues": {
+      "empty": "This file is empty; export the package again",
+      "notZip": "Only .zip packages are accepted",
+      "tooLarge": "The file exceeds {0}; slim it down and retry"
+    },
+    "processing": "Processing {0}%",
+    "published": "Published",
+    "queued": "Queued for processing",
+    "remove": "Remove",
+    "sizeHint": ".zip only, up to {0} per package",
+    "stages": {
+      "committing": "Switching version",
+      "extracting": "Extracting",
+      "postprocess": "Rewriting asset paths",
+      "validating": "Validating package"
+    },
+    "uploading": "Uploading"
+  },
+  "publish": {
+    "appendHint": "Publishing keeps the same link; visitors see the new version on refresh. Roll back from the version timeline on the prototype page.",
+    "bothBlankHint": "Empty project code will generate “{0}”, prototype code will generate “{1}”",
+    "closedHandoff": "Handed to the task panel in the lower-right corner; closing this drawer does not stop the publish",
+    "createTitle": "Upload HTML prototype",
+    "currentVersion": "Current version v{0}",
+    "dismiss": "Stop tracking",
+    "duplicateHint": "The server says this package matches the current version, so a normal publish is rejected. Tick force publish to release it anyway.",
+    "forcePublish": "Force publish",
+    "intakeFailed": "The publish request never reached the server; check the network and retry",
+    "keepWaiting": "Keep waiting",
+    "linkLabel": "Link after publishing",
+    "linkPending": "The full link appears once both codes are settled",
+    "newPrototype": "+ New prototype",
+    "newPrototypeTitle": "New prototype and publish",
+    "noCurrentVersion": "This prototype has no published version yet",
+    "noteLabel": "Version note",
+    "notePlaceholder": "What changed in this version (optional)",
+    "page": {
+      "intro": "Overwrite an existing prototype with a freshly exported package: the link stays the same.",
+      "pickNothing": "Pick a project and a prototype: its current version and access link show up here so you can confirm the target before uploading.",
+      "title": "Publish"
+    },
+    "projectMode": {
+      "existing": "Use an existing project",
+      "new": "Create a project"
+    },
+    "publishAction": "Publish now",
+    "publishFailed": "Publish failed",
+    "published": "Published",
+    "sections": {
+      "file": "Package",
+      "pick": "Pick a prototype",
+      "project": "Project",
+      "prototype": "Prototype"
+    },
+    "serverStage": "Server: {0} ({1}%)",
+    "targetGoneHint": "The target prototype was deleted, so this package has nowhere to attach. Pick another project and prototype, then publish again.",
+    "targetPrototype": "Target prototype",
+    "versionCount": "{0} versions published",
+    "viewDetail": "Open prototype",
+    "viewReport": "View release report",
+    "waitFailed": "Failed to read the task status",
+    "waitTimedOut": "Processing is taking longer than usual; check the prototype page later",
+    "appendTitle": "Upload a new version",
+    "fileRequired": "Pick a .zip package to upload",
+    "projectRequired": "Choose which project this belongs to",
+    "prototypeRequired": "Choose which prototype to publish to"
+  },
+  "release": {
+    "current": "Live",
+    "deletedVersion": {
+      "of": "Deleted v{0}"
+    },
+    "eventTimelineEmpty": "No activity yet. Publishes, rollbacks and version deletions will show up here.",
+    "eventTypes": {
+      "delete": "Version deleted",
+      "publish": "Published",
+      "republish": "Force republished",
+      "rollback": "Rolled back",
+      "unpublish": "Unpublished"
+    },
+    "report": {
+      "hide": "Hide release report",
+      "none": "This publish rewrote no paths and raised no warnings.",
+      "title": "Release report"
+    },
+    "rollback": {
+      "action": "Roll back to this version",
+      "confirm": "Roll this prototype back to v{0}? The link stays the same and visitors see that version after refreshing.",
+      "done": "Rolled back to v{0}",
+      "fromTo": "Rolled back from v{0} to v{1}",
+      "reason": "Reason (optional)",
+      "title": "Confirm rollback"
+    },
+    "timelineEmpty": "No version history yet: the timeline appears after the first publish.",
+    "versionNote": "Note",
+    "versionNoteEmpty": "No release note for this publish"
+  },
+  "project": {
+    "listTitle": "Projects",
+    "listIntro": "Upload static HTML prototypes and get shareable online links for team review.",
+    "emptyIntro": "No projects yet. Upload an HTML zip and both the project and the prototype get created for you, with an access link right away.",
+    "uploadFirst": "Upload your first HTML prototype",
+    "filterKeyword": "Project name / code",
+    "columns": {
+      "name": "Name",
+      "code": "Code",
+      "prototypeCount": "Prototypes",
+      "publishedCount": "Published",
+      "visitsLast7d": "Visits (7d)",
+      "updatedAt": "Updated"
+    },
+    "noPrototypes": "No prototypes",
+    "createTitle": "New Project",
+    "editTitle": "Edit Project",
+    "fields": {
+      "name": "Project name",
+      "code": "Project code",
+      "description": "Description"
+    },
+    "nameRequired": "Project name is required",
+    "archiveConfirm": "Archive project \"{0}\"? Every prototype link under it becomes inaccessible immediately; release artifacts are kept.",
+    "restoreConfirm": "Restore project \"{0}\"? Published prototype links under it become accessible again.",
+    "deleteConfirm": "Delete project \"{0}\"? This cascades to all its prototypes and version artifacts and cannot be undone.",
+    "detailNotFound": "Missing project id. Open it from the project list.",
+    "stats": {
+      "prototypes": "Total prototypes",
+      "published": "Published",
+      "draft": "Draft",
+      "archived": "Archived",
+      "visits7d": "Visits (last 7 days)",
+      "members": "Members"
+    },
+    "sections": {
+      "basic": "Basic info",
+      "members": "Members",
+      "prototypes": "Prototypes",
+      "activity": "Activity"
+    },
+    "basic": {
+      "createdBy": "Created by",
+      "createdAt": "Created at",
+      "lastPublishedAt": "Last published",
+      "archivedAt": "Archived at"
+    },
+    "members": {
+      "empty": "No members yet",
+      "selectPlaceholder": "Select users to add",
+      "save": "Save members",
+      "ownerTip": "The creator is always the owner and cannot be removed; member roles are recorded only in phase 1.",
+      "updated": "Members updated",
+      "usersLoadFailed": "Failed to load user list"
+    }
+  },
+  "prototype": {
+    "createTitle": "New Prototype",
+    "editTitle": "Edit Prototype",
+    "fields": {
+      "name": "Prototype name",
+      "code": "Prototype code",
+      "description": "Description"
+    },
+    "nameRequired": "Prototype name is required",
+    "filterKeyword": "Prototype name / code",
+    "columns": {
+      "name": "Name",
+      "code": "Code",
+      "accessUrl": "Access URL",
+      "currentVersion": "Current version",
+      "policy": "Access policy",
+      "updatedAt": "Updated"
+    },
+    "listEmpty": "No prototypes: create one to get a shareable access URL, live once published.",
+    "archiveConfirm": "Archive prototype \"{0}\"? Only this prototype's link becomes inaccessible; other prototypes in the same project are unaffected.",
+    "restoreConfirm": "Restore prototype \"{0}\"? Its published version links become accessible again.",
+    "deleteConfirm": "Delete prototype \"{0}\"? This cascades to all its version artifacts and cannot be undone.",
+    "detailNotFound": "Missing prototype id. Open it from the project detail page.",
+    "sections": {
+      "access": "Access",
+      "basic": "Basic info",
+      "currentVersion": "Current version",
+      "versions": "Version history",
+      "accessLog": "Access logs",
+      "members": "Who can access"
+    },
+    "accessLog": {
+      "hint": "The {0} most recent visits",
+      "more": "View all"
+    },
+    "fieldsInfo": {
+      "accessUrl": "Access URL",
+      "policy": "Access policy",
+      "project": "Project",
+      "createdAt": "Created at",
+      "updatedAt": "Last updated",
+      "visits7d": "Visits (last 7 days)"
+    },
+    "policy": {
+      "edit": "Edit policy",
+      "passwordLabel": "Access password",
+      "passwordRule": "At least 6 characters",
+      "passwordKeep": "Leave blank to keep the existing password",
+      "switchHint": "Changing mode or password invalidates visitors' unlocked state immediately.",
+      "updated": "Access policy updated",
+      "memberNote": "For \"Project members only\", access is exactly the parent project's members."
+    },
+    "version": {
+      "notPublished": "Not published yet: upload an HTML zip and publish to see the current version here.",
+      "no": "Version v{0}",
+      "fileCount": "Files",
+      "totalBytes": "Size",
+      "publishedBy": "Published by",
+      "publishedAt": "Published at"
+    },
+    "emptyHints": {
+      "accessLog": "No visits yet: this list fills in once the prototype is opened."
+    },
+    "members": {
+      "empty": "The parent project has no members; member-gated access would allow nobody."
+    },
+    "openLink": "Open link",
+    "switch": "Switch prototype"
+  },
+  "accesslog": {
+    "page": {
+      "title": "Access Logs",
+      "intro": "Visit details and trends for prototypes; rows whose prototype was deleted or whose code never existed show up as an invalid link."
+    },
+    "noPermission": "Missing permission to view access logs (proto:accesslog:list).",
+    "filters": {
+      "title": "Filters",
+      "today": "Today",
+      "last7d": "Last 7 days",
+      "last30d": "Last 30 days",
+      "custom": "Custom",
+      "resultPlaceholder": "All results",
+      "keywordPlaceholder": "Search IP or browser UA",
+      "reset": "Reset"
+    },
+    "scope": {
+      "title": "Current scope",
+      "project": "Project",
+      "prototype": "Prototype"
+    },
+    "metrics": {
+      "pv": "PV · entry visits",
+      "uv": "UV · unique visitors",
+      "denied": "Denied",
+      "botPv": "Bot requests",
+      "invalidPv": "Invalid-link visits"
+    },
+    "trend": {
+      "title": "PV / UV trend (last {0} days)",
+      "pv": "PV",
+      "uv": "UV"
+    },
+    "results": {
+      "ok": "OK",
+      "denied_401": "Password required",
+      "denied_403": "No permission",
+      "not_found": "Not found"
+    },
+    "devices": {
+      "desktop": "Desktop",
+      "mobile": "Mobile",
+      "tablet": "Tablet",
+      "bot": "Bot"
+    },
+    "invalidLink": "Invalid link",
+    "anonymous": "Anonymous",
+    "columns": {
+      "createdAt": "Time",
+      "projectName": "Project",
+      "prototype": "Prototype",
+      "versionNo": "Version",
+      "path": "Path",
+      "result": "Result",
+      "visitor": "Visitor",
+      "env": "Browser/OS/Device",
+      "referer": "Referer"
+    }
+  },
+  "workspace": {
+    "title": "Workspace",
+    "upload": "Upload HTML Prototype",
+    "stats": {
+      "projects": "Projects",
+      "prototypes": "Prototypes",
+      "releases": "Releases This Week",
+      "visits": "Visits (Last 7 Days)",
+      "visitsCompare": "{0} vs previous 7 days",
+      "visitsPrevZero": "0 in the previous 7 days"
+    },
+    "recentPrototypes": {
+      "title": "Recently Updated Prototypes",
+      "empty": "No prototypes yet. Upload your first HTML prototype and the 5 most recent will show up here.",
+      "visits": "{0} visits in the last 7 days",
+      "ofProject": "Project {0}"
+    },
+    "recentEvents": {
+      "title": "Recent Activity"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "security": "Account Security",
+      "user": "Users",
+      "role": "Roles",
+      "menu": "Menus",
+      "log": "Logs"
+    }
+  },
+  "account": {
+    "profileTitle": "Profile",
+    "profileDesc": "Update name, email, phone and avatar",
+    "passwordTitle": "Change Password",
+    "passwordDesc": "All devices must sign in again after a password change",
+    "forceTitle": "Password change required",
+    "forceDesc": "Set a new password before entering the system",
+    "fields": {
+      "realName": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "avatar": "Avatar URL",
+      "username": "Username",
+      "oldPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password"
+    },
+    "passwordRule": "At least 8 characters with 3 of: uppercase, lowercase, digit, symbol",
+    "passwordMismatch": "The two passwords do not match",
+    "emailInvalid": "Invalid email address",
+    "passwordChanged": "Password changed. Please sign in again.",
+    "profileUpdated": "Profile updated",
+    "logout": "Sign out",
+    "lastLogin": "Last login",
+    "neverLoggedIn": "Never signed in"
+  },
+  "user": {
+    "columns": {
+      "username": "Username",
+      "realName": "Name",
+      "email": "Email",
+      "roles": "Roles",
+      "status": "Status",
+      "lastLoginAt": "Last login"
+    },
+    "filter": {
+      "keywordPlaceholder": "Username / name / email"
+    },
+    "createTitle": "New User",
+    "editTitle": "Edit User",
+    "fields": {
+      "username": "Username",
+      "realName": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "roles": "Roles",
+      "status": "Status",
+      "remark": "Remark"
+    },
+    "usernameRule": "3-32 chars: letters, digits, underscore and dot only",
+    "createPasswordTip": "The initial password is generated randomly and shown only once",
+    "assignRolesTitle": "Assign Roles",
+    "resetPassword": "Reset Password",
+    "resetPasswordConfirm": "A new random password will be generated for \"{0}\" and all of its active sessions are revoked. Continue?",
+    "toggleConfirm": "{0} user \"{1}\"? Disabling revokes the online session immediately.",
+    "deleteAction": "Delete User",
+    "deleteConfirm": "Delete user \"{0}\"? Links and sign-in are disabled immediately.",
+    "builtIn": "Built-in",
+    "passwordResult": {
+      "createdTitle": "User created",
+      "resetTitle": "Password reset",
+      "copyTip": "Shown only once. Copy it and hand it to the user.",
+      "reveal": "Click to reveal",
+      "hide": "Hide password",
+      "ack": "I have noted it, close"
+    }
+  },
+  "role": {
+    "listTitle": "Roles",
+    "createTitle": "New Role",
+    "columns": {
+      "name": "Name",
+      "code": "Code",
+      "userCount": "Users",
+      "dataScope": "Data scope"
+    },
+    "fields": {
+      "name": "Role name",
+      "code": "Role code",
+      "dataScope": "Data scope",
+      "sort": "Sort",
+      "status": "Status",
+      "remark": "Remark"
+    },
+    "builtIn": "Built-in",
+    "builtInCodeTip": "Built-in roles: code is immutable and cannot be deleted",
+    "codeRule": "Code must start with a lowercase letter and contain only lowercase letters, digits and underscores (2-64 characters)",
+    "dataScopes": {
+      "all": "All projects",
+      "member": "Projects I join",
+      "own": "Projects I created"
+    },
+    "permissionsTitle": "Permission codes",
+    "menuTitle": "Menu permissions",
+    "panelEmpty": "Select a role on the left to configure",
+    "saveBasic": "Save basic info",
+    "savePermissions": "Save grants",
+    "deleteConfirm": "Delete role \"{0}\"? Rejected while users are bound.",
+    "noAssignPerm": "No \"assign permission\" rights; only basic info can be edited",
+    "modules": {
+      "dashboard": "Dashboard",
+      "proto": "Prototype",
+      "system": "System"
+    }
+  },
+  "menu": {
+    "createTitle": "New Menu",
+    "editTitle": "Edit Menu",
+    "addChild": "Add child",
+    "columns": {
+      "title": "Name",
+      "type": "Type",
+      "path": "Route",
+      "component": "Component",
+      "authCode": "Auth code"
+    },
+    "fields": {
+      "type": "Type",
+      "pid": "Parent",
+      "name": "Route name",
+      "title": "Title",
+      "path": "Route path",
+      "component": "Component path",
+      "icon": "Icon",
+      "authCode": "Auth code",
+      "iframeSrc": "Iframe src",
+      "linkUrl": "External link",
+      "pageOptions": "Page options",
+      "hideInMenu": "Hide in menu",
+      "keepAlive": "Keep alive",
+      "affixTab": "Affix tab",
+      "menuVisibleWithForbidden": "Visible but blocked",
+      "status": "Status"
+    },
+    "types": {
+      "catalog": "Catalog",
+      "menu": "Menu",
+      "button": "Button",
+      "embedded": "Embedded",
+      "link": "Link"
+    },
+    "componentTip": "Path relative to src/views, e.g. /system/setting/index (no .vue)",
+    "urlRule": "Enter a valid URL starting with http:// or https://",
+    "rootOption": "Root",
+    "deleteConfirm": "Delete \"{0}\"? Rejected when children exist."
+  },
+  "log": {
+    "tabs": {
+      "login": "Login logs",
+      "oper": "Operation logs"
+    },
+    "loginColumns": {
+      "createdAt": "Time",
+      "username": "Account",
+      "ip": "IP",
+      "userAgent": "Client",
+      "loginType": "Type",
+      "success": "Result",
+      "failReason": "Failure reason"
+    },
+    "operColumns": {
+      "createdAt": "Time",
+      "username": "Operator",
+      "module": "Module",
+      "resource": "Resource",
+      "action": "Action",
+      "path": "Endpoint",
+      "ip": "IP",
+      "duration": "Duration",
+      "errorMessage": "Error"
+    },
+    "filter": {
+      "usernamePlaceholder": "Account",
+      "actionPlaceholder": "Action",
+      "resourceType": {
+        "label": "Resource type",
+        "options": {
+          "project": "Project",
+          "prototype": "Prototype",
+          "release": "Release",
+          "user": "User",
+          "role": "Role",
+          "menu": "Menu"
+        }
+      },
+      "dateRange": "Date range"
+    },
+    "result": {
+      "success": "Success",
+      "fail": "Failure"
+    },
+    "loginTypes": {
+      "login": "Login",
+      "logout": "Logout",
+      "refresh_fail": "Refresh failed"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "desc": "Manage your profile and sign-in password"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "name": "@protohub/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "dev": "nest start --watch",
+    "build": "nest build",
+    "start": "node dist/main.js",
+    "typecheck": "tsc --noEmit --skipLibCheck",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@protohub/shared": "workspace:*",
+    "@protohub/db": "workspace:*",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-fastify": "catalog:",
+    "@nestjs/config": "catalog:",
+    "@nestjs/jwt": "catalog:",
+    "@nestjs/schedule": "catalog:",
+    "@nestjs/swagger": "catalog:",
+    "@fastify/cookie": "catalog:",
+    "@fastify/multipart": "catalog:",
+    "@fastify/static": "catalog:",
+    "@prisma/client": "catalog:",
+    "argon2": "catalog:",
+    "cheerio": "catalog:",
+    "postcss": "catalog:",
+    "postcss-value-parser": "catalog:",
+    "yauzl": "catalog:",
+    "zod": "catalog:",
+    "pino": "catalog:",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@vben/tsconfig": "workspace:*",
+    "@nestjs/testing": "catalog:",
+    "@types/node": "catalog:",
+    "@types/yauzl": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0"
+  }
+}

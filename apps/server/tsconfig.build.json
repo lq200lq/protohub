@@ -1,0 +1,20 @@
+{
+  // nest build 默认读 tsconfig.build.json：把单测和测试夹具挡在 dist 之外；
+  // typecheck 仍走 tsconfig.json，覆盖 src 里的 *.spec.ts。
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // dist 直接镜像 src：`node dist/main.js` 与 package.json 的 start 脚本对得上。
+    "rootDir": "src",
+    // vben 基类配置是 "noEmit": true（给前端 typecheck 用），Nest 构建必须真的产出 JS。
+    "noEmit": false,
+    "declaration": false,
+    "sourceMap": false
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts",
+    "src/testing/**",
+    "vitest.config.ts"
+  ]
+}
