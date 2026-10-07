@@ -16,5 +16,7 @@ export const overridesPreferences = defineOverridesPreferences({
   },
   theme: {
     colorPrimary: '#2563eb',
+    // 默认白天模式，不跟随暗黑
+    mode: 'light',
   },
 });
