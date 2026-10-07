@@ -360,21 +360,24 @@ function envSubText(row: AccessLogItem): string {
               size="small"
               @change="onResultChange"
             />
-            <Input
-              v-model:value="keyword"
-              :placeholder="$t('proto.accesslog.filters.keywordPlaceholder')"
-              allow-clear
-              class="min-w-48"
-              size="small"
-              @press-enter="applyFilters"
-            />
-            <div class="flex items-center gap-2">
-              <Button size="small" type="primary" @click="applyFilters">
-                {{ $t('proto.common.search') }}
-              </Button>
-              <Button size="small" @click="onReset">
-                {{ $t('proto.accesslog.filters.reset') }}
-              </Button>
+            <!-- 关键词框和它的动作按钮绑成一个 flex 项：整块换行，不再各占一行 -->
+            <div class="flex max-w-96 flex-1 items-center gap-3">
+              <Input
+                v-model:value="keyword"
+                :placeholder="$t('proto.accesslog.filters.keywordPlaceholder')"
+                allow-clear
+                class="min-w-48 flex-1"
+                size="small"
+                @press-enter="applyFilters"
+              />
+              <div class="flex items-center gap-2">
+                <Button size="small" type="primary" @click="applyFilters">
+                  {{ $t('proto.common.search') }}
+                </Button>
+                <Button size="small" @click="onReset">
+                  {{ $t('proto.accesslog.filters.reset') }}
+                </Button>
+              </div>
             </div>
           </div>
 

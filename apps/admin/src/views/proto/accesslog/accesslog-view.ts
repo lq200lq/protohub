@@ -332,7 +332,8 @@ export function buildTrendOption(daily: AccessLogDailyPoint[], labels: AccessLog
   const dates = daily.map((point) => point.date);
   return {
     grid: { left: 48, right: 24, top: 40, bottom: 32 },
-    legend: { data: [labels.pv, labels.uv] },
+    // 默认图例落 bottom 压在 x 轴日期上；grid.top=40 已经给顶部留了位
+    legend: { data: [labels.pv, labels.uv], left: 'center', top: 0 },
     series: [
       {
         data: daily.map((point) => point.pv),

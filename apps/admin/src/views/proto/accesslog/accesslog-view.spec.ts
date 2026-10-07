@@ -289,6 +289,12 @@ describe('buildTrendOption：PV/UV 双折线', () => {
       '2026-10-07',
     ]);
   });
+
+  it('图例钉在顶部居中：默认 bottom 会压在 x 轴日期上，grid.top=40 是给它留的位', () => {
+    const option = buildTrendOption([], { pv: 'PV', uv: 'UV' });
+    expect(option.legend).toMatchObject({ left: 'center', top: 0 });
+    expect((option.grid as { top: number }).top).toBeGreaterThanOrEqual(24);
+  });
 });
 
 describe('buildAccessLogJumpQuery / ACCESS_LOG 跳转（M4-T12 详情页带范围跳入）', () => {
