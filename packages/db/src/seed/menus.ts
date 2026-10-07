@@ -1,7 +1,9 @@
 /**
  * 菜单树种子（数据库设计 §6.3 + 前端设计 §2/§3/§4）。
  *
- * 结构：扁平一级菜单（工作台/原型项目/访问记录/设置 + 两个 hideInMenu 详情页 + Profile），
+ * 结构：一级菜单（工作台/原型项目/访问记录/系统设置 + 两个 hideInMenu 详情页 + Profile），
+ * 其中系统设置是唯一的二级目录（catalog）：下挂账号安全/用户管理/角色管理/菜单管理/日志
+ * 5 个页面子节点，前端按权限码对子菜单做可见性过滤（前端设计 §3.8）。
  * 每个"写操作"权限码都有一个 type='button' 节点（权限模型 §3.7：按钮节点只是授权树的
  * 勾选骨架，最终权限仍以 sys_role_permission 为准）。
  *
@@ -88,12 +90,57 @@ export const MENU_SEED: readonly MenuSeedNode[] = [
   },
   {
     name: 'SystemSetting',
-    type: 'menu',
-    title: '设置',
+    type: 'catalog',
+    title: '系统设置',
     path: '/system/setting',
-    component: '/system/setting/index',
     icon: 'lucide:settings',
     sort: 99,
+  },
+  // ── 系统设置子菜单（§6.3：一级里唯一的二级目录；可见性由前端按权限码过滤） ──
+  {
+    name: 'SystemSettingSecurity',
+    type: 'menu',
+    title: '账号安全',
+    parent: 'SystemSetting',
+    path: '/system/setting/security',
+    component: '/system/setting/security/index',
+    sort: 1,
+  },
+  {
+    name: 'SystemSettingUser',
+    type: 'menu',
+    title: '用户管理',
+    parent: 'SystemSetting',
+    path: '/system/setting/user',
+    component: '/system/setting/user/index',
+    sort: 2,
+  },
+  {
+    name: 'SystemSettingRole',
+    type: 'menu',
+    title: '角色管理',
+    parent: 'SystemSetting',
+    path: '/system/setting/role',
+    component: '/system/setting/role/index',
+    sort: 3,
+  },
+  {
+    name: 'SystemSettingMenu',
+    type: 'menu',
+    title: '菜单管理',
+    parent: 'SystemSetting',
+    path: '/system/setting/menu',
+    component: '/system/setting/menu/index',
+    sort: 4,
+  },
+  {
+    name: 'SystemSettingLog',
+    type: 'menu',
+    title: '日志',
+    parent: 'SystemSetting',
+    path: '/system/setting/log',
+    component: '/system/setting/log/index',
+    sort: 5,
   },
   {
     name: 'Profile',
@@ -126,23 +173,23 @@ export const MENU_SEED: readonly MenuSeedNode[] = [
   // ── 访问记录导出（P1，权限模型 §3.5） ────────────────────────────────────
   button('ProtoAccesslogExport', 'ProtoAccessLog', 'proto:accesslog:export'),
 
-  // ── 系统管理按钮（挂 SystemSetting；Tab 级权限即 §3.8 的按钮码，写动作逐条补） ──
-  button('SystemUserManage', 'SystemSetting', 'system:user:list'),
-  button('SystemUserCreate', 'SystemSetting', 'system:user:create'),
-  button('SystemUserUpdate', 'SystemSetting', 'system:user:update'),
-  button('SystemUserDelete', 'SystemSetting', 'system:user:delete'),
-  button('SystemUserResetPwd', 'SystemSetting', 'system:user:resetpwd'),
-  button('SystemUserAssignRole', 'SystemSetting', 'system:user:assignrole'),
-  button('SystemRoleManage', 'SystemSetting', 'system:role:list'),
-  button('SystemRoleCreate', 'SystemSetting', 'system:role:create'),
-  button('SystemRoleUpdate', 'SystemSetting', 'system:role:update'),
-  button('SystemRoleDelete', 'SystemSetting', 'system:role:delete'),
-  button('SystemRoleAssignPerm', 'SystemSetting', 'system:role:assignperm'),
-  button('SystemMenuManage', 'SystemSetting', 'system:menu:list'),
-  button('SystemMenuCreate', 'SystemSetting', 'system:menu:create'),
-  button('SystemMenuUpdate', 'SystemSetting', 'system:menu:update'),
-  button('SystemMenuDelete', 'SystemSetting', 'system:menu:delete'),
-  button('SystemLogView', 'SystemSetting', 'system:log:list'),
+  // ── 系统管理按钮（挂各自最近的页面子菜单；子菜单级权限即前端设计 §3.8 所列的码，写动作逐条补） ──
+  button('SystemUserManage', 'SystemSettingUser', 'system:user:list'),
+  button('SystemUserCreate', 'SystemSettingUser', 'system:user:create'),
+  button('SystemUserUpdate', 'SystemSettingUser', 'system:user:update'),
+  button('SystemUserDelete', 'SystemSettingUser', 'system:user:delete'),
+  button('SystemUserResetPwd', 'SystemSettingUser', 'system:user:resetpwd'),
+  button('SystemUserAssignRole', 'SystemSettingUser', 'system:user:assignrole'),
+  button('SystemRoleManage', 'SystemSettingRole', 'system:role:list'),
+  button('SystemRoleCreate', 'SystemSettingRole', 'system:role:create'),
+  button('SystemRoleUpdate', 'SystemSettingRole', 'system:role:update'),
+  button('SystemRoleDelete', 'SystemSettingRole', 'system:role:delete'),
+  button('SystemRoleAssignPerm', 'SystemSettingRole', 'system:role:assignperm'),
+  button('SystemMenuManage', 'SystemSettingMenu', 'system:menu:list'),
+  button('SystemMenuCreate', 'SystemSettingMenu', 'system:menu:create'),
+  button('SystemMenuUpdate', 'SystemSettingMenu', 'system:menu:update'),
+  button('SystemMenuDelete', 'SystemSettingMenu', 'system:menu:delete'),
+  button('SystemLogView', 'SystemSettingLog', 'system:log:list'),
 ] as const;
 
 /**

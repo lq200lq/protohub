@@ -14,10 +14,10 @@
     "vue vben admin pro",
     "vue3"
   ],
-  "homepage": "https://github.com/vbenjs/vue-vben-admin",
-  "bugs": "https://github.com/vbenjs/vue-vben-admin/issues",
-  "repository": "vbenjs/vue-vben-admin.git",
-  "license": "MIT",
+  "homepage": "https://github.com/lq200lq/protohub",
+  "bugs": "https://github.com/lq200lq/protohub/issues",
+  "repository": "https://github.com/lq200lq/protohub.git",
+  "license": "Apache-2.0",
   "author": {
     "name": "vben",
     "email": "ann.vben@gmail.com",
@@ -51,6 +51,7 @@
     "version": "pnpm exec changeset version && pnpm install --no-frozen-lockfile",
     "check:consistency": "node scripts/check-consistency.ts",
     "db:migrate": "pnpm -F @protohub/db migrate",
+    "db:migrate-menu": "pnpm -F @protohub/db migrate-menu",
     "db:studio": "pnpm -F @protohub/db studio",
     "db:seed": "pnpm -F @protohub/db seed",
     "db:seed-admin": "pnpm -F @protohub/db seed-admin",

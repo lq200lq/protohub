@@ -12,6 +12,7 @@
   "scripts": {
     "generate": "prisma generate",
     "migrate": "node scripts/apply-migrations.mjs",
+    "migrate-menu": "tsx src/migrate-menu.ts",
     "seed": "tsx src/seed.ts",
     "seed-admin": "tsx src/seed-admin.ts",
     "studio": "prisma studio",

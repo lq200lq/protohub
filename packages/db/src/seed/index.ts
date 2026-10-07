@@ -119,8 +119,11 @@ export async function runSeed(db: Prisma.TransactionClient): Promise<SeedResult>
   const menuIdByName = new Map(before.map((m) => [m.name, m.id]));
 
   const pageNodes = MENU_SEED.filter((n) => n.type !== 'button');
+  // 顶层页面先插（pid: null）；子页面要等父 id 出来才能插（二级目录：系统设置）
+  const topLevelPages = pageNodes.filter((n) => n.parent === undefined);
+  const childPages = pageNodes.filter((n) => n.parent !== undefined);
   await db.sysMenu.createMany({
-    data: pageNodes
+    data: topLevelPages
       .filter((n) => !presentBefore.has(n.name))
       .map((n) => ({
         pid: null,
@@ -139,6 +142,38 @@ export async function runSeed(db: Prisma.TransactionClient): Promise<SeedResult>
   });
 
   // 重新取 id（首跑时 createMany 不回传 id；二跑时也要能解析出已存在页面的 id）
+  const topLevelRows = await db.sysMenu.findMany({
+    where: { name: { in: topLevelPages.map((n) => n.name) } },
+  });
+  for (const m of topLevelRows) menuIdByName.set(m.name, m.id);
+
+  // 子页面逐条插入：父节点必须已存在（与按钮节点同一套"菜单树不完整"护栏），
+  // 逐条而非 createMany 是为了兼容未来更深的层级——父可以是更浅的子页面
+  for (const n of childPages) {
+    if (presentBefore.has(n.name)) continue;
+    const pid = n.parent ? menuIdByName.get(n.parent) : undefined;
+    if (pid === undefined) {
+      throw new Error(`[seed] 页面 ${n.name} 的父节点 ${n.parent} 不存在（菜单树不完整）`);
+    }
+    const created = await db.sysMenu.create({
+      data: {
+        pid,
+        type: n.type,
+        name: n.name,
+        title: n.title,
+        path: n.path ?? null,
+        component: n.component ?? null,
+        authCode: n.authCode ?? null,
+        icon: n.icon ?? null,
+        sort: n.sort ?? 0,
+        affixTab: n.affixTab ?? false,
+        hideInMenu: n.hideInMenu ?? false,
+      },
+    });
+    menuIdByName.set(created.name, created.id);
+  }
+
+  // 回查全部页面 id（新建的顶层行与已存在的子页面都要进映射，按钮 pid 解析依赖它）
   const afterPages = await db.sysMenu.findMany({
     where: { name: { in: pageNodes.map((n) => n.name) } },
   });
