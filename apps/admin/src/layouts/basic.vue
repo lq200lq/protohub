@@ -91,6 +91,12 @@ watch(
 
 <template>
   <BasicLayout @clear-preferences-and-logout="handleLogout">
+    <!-- 框架默认 text-lg 会让 8 字品牌名差 4px 出省略号，降一级到 text-base 完整显示 -->
+    <template #logo-text>
+      <span class="text-foreground truncate text-base font-semibold text-nowrap">
+        {{ preferences.app.name }}
+      </span>
+    </template>
     <template #user-dropdown>
       <UserDropdown
         :avatar
