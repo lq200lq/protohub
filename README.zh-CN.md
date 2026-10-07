@@ -1,157 +1,197 @@
 <div align="center">
-  <a href="https://github.com/anncwb/vue-vben-admin">
-    <img alt="VbenAdmin Logo" width="215" src="https://unpkg.com/@vbenjs/static-source@0.1.7/source/logo-v1.webp">
-  </a>
-  <br>
-  <br>
+  <img src="./assets/banner.jpg" alt="ProtoHub banner" width="100%">
 
-[![license](https://img.shields.io/github/license/anncwb/vue-vben-admin.svg)](LICENSE)
+  <h1>ProtoHub · HTML 原型托管平台</h1>
 
-  <h1>Vue Vben Admin</h1>
+  <p>把 HTML 原型 ZIP 上传发布成可分享的在线链接，按项目 / 原型 / 版本三级管理，支持公开、密码、项目成员三档访问策略与完整的访问统计。</p>
+
+  [![License](https://img.shields.io/github/license/lq200lq/protohub.svg)](./LICENSE)
+  ![Node](https://img.shields.io/badge/Node-%5E22.18%20%7C%20%5E24-brightgreen)
+  ![pnpm](https://img.shields.io/badge/pnpm-%E2%89%A511-blue)
+  ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-blue)
+
+  **中文** | [English](./README.md)
+
+  <sub>快速上手：<code>pnpm install</code> → 配置环境变量 → <code>pnpm db:migrate &amp;&amp; pnpm db:seed</code> → <code>pnpm dev</code>，详见下方「快速开始」。</sub>
 </div>
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vbenjs_vue-vben-admin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=vbenjs_vue-vben-admin) ![codeql](https://github.com/vbenjs/vue-vben-admin/actions/workflows/codeql.yml/badge.svg) ![build](https://github.com/vbenjs/vue-vben-admin/actions/workflows/build.yml/badge.svg) ![ci](https://github.com/vbenjs/vue-vben-admin/actions/workflows/ci.yml/badge.svg) ![deploy](https://github.com/vbenjs/vue-vben-admin/actions/workflows/deploy.yml/badge.svg)
+---
 
-**中文** | [English](./README.md) | [日本語](./README.ja-JP.md)
+## 为什么选它
 
-## 简介
+给团队/客户演示 HTML 原型时，常见做法是丢一个 zip 或开一个一次性的静态目录：没法回滚、没法限权、也说不清谁看过。ProtoHub 把这件事产品化：
 
-Vue Vben Admin 是 Vue Vben Admin 的升级版本。作为一个免费开源的中后台模板，它采用了最新的 Vue 3、Vite、TypeScript 等主流技术开发，开箱即用，可用于中后台前端开发，也适合学习参考。
+- **上传即发布**：拖入 HTML 原型 ZIP，立刻得到 `http://…/p/{项目编码}/{原型编码}` 的固定分享链接。
+- **版本不可变**：每次发布都是一个快照，随时回滚到任意历史版本，分享链接不变。
+- **看得住**：公开访问 / 访问密码 / 仅项目成员三档策略，密码档有解锁限流与 24 小时免重输。
+- **看得见**：PV / UV 趋势、被拒次数、爬虫与无效链接统计，按项目、原型、时间范围下钻。
 
-## 升级提示
+## 功能特性
 
-该版本为最新版本 `5.0`，与其他版本不兼容，如果你是新项目，建议使用最新版本。如果你想查看旧版本，请使用 [v2 分支](https://github.com/vbenjs/vue-vben-admin/tree/v2)
+- **三级模型**：项目 → 原型 → 版本。项目是容器，原型是分享与鉴权的最小单位，版本是不可变快照。
+- **发布流水线**：ZIP 流式上传、解包校验（条目数/单文件/总量/压缩比）、生成发布报告，支持追加新版本与传新版本。
+- **版本管理**：版本记录、一键回滚、删除版本、下载版本包，归档项目/原型。
+- **访问策略**：`public` / `password` / `member` 三档；密码档带门面页、argon2id 存储、解锁 Cookie 与失败限流。
+- **访问记录**：PV/UV 日趋势、访问明细（项目/原型/版本/路径/结果/访客/IP/UA/来源）、被拒次数、爬虫请求、无效链接访问，支持筛选与导出。
+- **权限体系**：`super_admin` / `admin` / `publisher` / `viewer` 四个内置角色，39 个权限码驱动动态菜单与按钮级控制。
+- **管理能力**：用户管理、角色授权、菜单管理、操作日志 / 登录日志、项目成员。
+- **工作台**：项目数 / 原型数 / 本周发布次数 / 近 7 天访问量四张统计卡，最近更新的原型与最近动态一屏看完。
+- **界面**：亮/暗主题、中英文界面文案、响应式布局。
 
-## 特性
+## 系统截图
 
-- **最新技术栈**：使用 Vue3/vite 等前端前沿技术开发
-- **TypeScript**：应用程序级 JavaScript 的语言
-- **主题**：提供多套主题色彩，可配置自定义主题
-- **国际化**：内置完善的国际化方案
-- **权限**：内置完善的动态路由权限生成方案
+| | |
+| :---: | :---: |
+| <img src="./assets/screenshots/01-workspace.png" alt="工作台" width="100%"> | <img src="./assets/screenshots/02-upload-drawer.png" alt="上传抽屉" width="100%"> |
+| **工作台**：统计概览 + 最近原型 + 最近动态 | **上传 HTML 原型**：新建项目与原型一次完成 |
 
-## 预览
+| | |
+| :---: | :---: |
+| <img src="./assets/screenshots/03-project-list.png" alt="项目列表" width="100%"> | <img src="./assets/screenshots/04-project-detail.png" alt="项目详情" width="100%"> |
+| **原型项目**：列表与筛选 | **项目详情**：原型列表、访问地址、项目动态 |
 
-- [Vben Admin](https://vben.pro/) - 完整版中文站点
+| | |
+| :---: | :---: |
+| <img src="./assets/screenshots/05-prototype-detail.png" alt="原型详情" width="100%"> | <img src="./assets/screenshots/06-accesslog.png" alt="访问记录" width="100%"> |
+| **原型详情**：访问策略、当前版本、版本记录与回滚 | **访问记录**：PV/UV 指标与趋势、访问明细 |
 
-测试账号：vben/123456
+| |
+| :---: |
+| <img src="./assets/screenshots/07-settings.png" alt="设置" width="100%"> |
+| **设置**：用户 / 角色 / 菜单 / 日志管理 |
 
-<div align="center">
-  <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview1.png">
-  <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview2.png">
-  <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview3.png">
-</div>
+## 架构
 
-### 使用 Gitpod
+```mermaid
+flowchart LR
+    publisher["发布者（浏览器）"] -->|"上传 ZIP / 发布 / 回滚"| admin["apps/admin<br/>Vue 3 · Vite · ant-design-vue（vben-admin）"]
+    admin -->|"REST：/api/*"| server["apps/server<br/>NestJS 11 · Fastify"]
+    server --> db[("PostgreSQL 17<br/>Prisma ORM")]
+    server --> storage[("STORAGE_ROOT<br/>releases / manifests / tmp / trash")]
+    visitor["访客 / 评审者"] -->|"GET /p/:projectCode/:prototypeCode"| server
+    server -->|"SERVE_STATIC=node 由 Fastify 通配路由直出"| visitor
+    nginx["nginx（生产）"] -. SERVE_STATIC=nginx 静态直出 .-> visitor
+    server -. Swagger：/api/docs .-> dev["接口调试"]
+```
 
-在 Gitpod（适用于 GitHub 的免费在线开发环境）中打开项目，并立即开始编码。
+- 管理端与访客访问分离：管理接口全部在 `/api` 前缀下，原型静态产物走 `/p/*`，互不干扰。
+- 原型产物不入库，落盘在 `STORAGE_ROOT` 下固定子目录；数据库只存项目/原型/版本元数据与访问日志。
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/vbenjs/vue-vben-admin)
+## 技术栈
+
+| 层 | 选型 |
+| --- | --- |
+| 管理端 | Vue 3.5 · Vite 8 · TypeScript 5.9 · ant-design-vue 4 · [vben-admin](https://github.com/vbenjs/vue-vben-admin) 5.7 · ECharts |
+| 服务端 | NestJS 11 · Fastify 5 · JWT（access + refresh）· argon2id |
+| 数据 | PostgreSQL 17 · Prisma 6（`@protohub/db`） |
+| 共享 | `@protohub/shared`（类型契约、权限码常量） |
+| 工程 | pnpm workspace · Turborepo · changesets · lefthook + commitlint · Vitest |
+
+## 快速开始
+
+### 环境要求
+
+- Node.js `^22.18.0 || ^24.0.0`（见 `package.json` 的 `engines`）
+- pnpm `>= 11.0.0`（仓库 `packageManager` 固定 `pnpm@11.6.0`，建议 `corepack enable`）
+- PostgreSQL 17（连接串约定一律写 `127.0.0.1`，**禁止主机名 `localhost`**）
+
+### 安装与初始化
+
+```bash
+git clone https://github.com/lq200lq/protohub.git
+cd protohub
+pnpm install                      # postinstall 会构建 @protohub/shared 与 @protohub/db
+
+# 数据库连接
+cp packages/db/.env.example packages/db/.env          # 按需修改 DATABASE_URL
+
+# 服务端配置（四个密钥必须各自用 openssl 生成且互不相同，否则启动校验会拒绝）
+cp apps/server/.env.example apps/server/.env
+#   openssl rand -base64 48   # 依次填入 JWT_ACCESS_SECRET / JWT_REFRESH_SECRET /
+#                             #    SESSION_COOKIE_SECRET / ACCESS_TOKEN_SECRET
+
+pnpm db:migrate                   # 建表（自动检测并创建 *_test 测试库）
+pnpm db:seed                      # 内置角色 / 权限码 / 菜单
+pnpm db:seed-admin                # 创建超管 admin，随机口令只打印这一次
+```
+
+### 启动开发环境
+
+```bash
+pnpm dev              # 同时起管理端与服务端；也可以分别用 pnpm dev:admin / pnpm dev:server
+```
+
+| 服务 | 地址 |
+| --- | --- |
+| 管理端 | <http://127.0.0.1:5671>（端口冲突会显式失败，`strictPort`） |
+| API 服务 | <http://127.0.0.1:3100> |
+| 接口文档 | <http://127.0.0.1:3100/api/docs> |
+
+> 登录账号为 `pnpm db:seed-admin` 打印的 admin 口令（只打印一次，请保存）。只想在本地图省事时，可以运行 `node scripts/reset-admin-password.mjs` 把 admin 口令重置为脚本内的固定值——**仅限本地开发库，切勿用于生产**。
+> 前端开发服务器把 `/api` 代理到 `http://127.0.0.1:3100`，无需额外配置。
+
+## 常用命令
+
+| 命令 | 作用 |
+| --- | --- |
+| `pnpm dev` | 启动管理端 + 服务端开发环境 |
+| `pnpm build` | 构建全部产物（Turbo） |
+| `pnpm db:migrate` / `db:seed` / `db:seed-admin` / `db:studio` | 迁移 / 种子数据 / 创建超管 / Prisma Studio |
+| `pnpm check` | 类型 + 循环依赖 + 一致性 + 测试（提交前的总门禁） |
+| `pnpm check:consistency` | 7 条规则校验权限码↔表、菜单↔真实文件等（只读） |
+| `pnpm lint` / `pnpm format` | ESLint · Stylelint · Prettier |
+| `pnpm test` / `pnpm test:admin` | 全量单测 / 管理端单测 |
+| `pnpm smoke` | 端到端冒烟：登录→建项目→发布→三档访问→回滚→归档→查记录 |
+| `pnpm bench` | 列表/发布/访问性能基准 |
+| `pnpm commit` | 交互式提交（czg + commitlint） |
+
+## 项目结构
+
+```text
+protohub/
+├── apps/
+│   ├── admin/          # 管理端（Vue 3 + vben-admin）
+│   └── server/         # API 服务（NestJS + Fastify），/p/* 静态直出
+├── packages/
+│   ├── db/             # Prisma schema、迁移、种子（角色/权限/菜单）
+│   ├── shared/         # 跨端类型契约、权限码常量
+│   └── @vben/…         # 框架层包（effects / @core / locales / …）
+├── scripts/            # 一致性检查、冒烟、基准、部署与运维脚本
+├── docs/               # 设计文档（先读 docs/README.md 的文档地图）
+└── assets/             # README 用 banner 与系统截图
+```
+
+## 质量保障
+
+- **单测**：服务端 68 个 spec、管理端 8 个 spec，加上 shared / db 测试，`pnpm check:test` 串联执行。
+- **一致性门禁**：`pnpm check:consistency` 校验权限码与数据库表、`@RequirePermission` 注解、菜单组件与真实 `.vue` 文件等 7 条规则，防止三处（DB / 后端 / 前端）定义漂移。
+- **端到端**：`pnpm smoke` 在独立测试库与端口上跑完整业务链路；`pnpm bench` 给出列表、发布、访问的性能读数。
+- **Git 钩子**：lefthook 在 pre-commit 跑 `pnpm lint` + `pnpm check:type`，commit-msg 走 commitlint。
 
 ## 文档
 
-[文档地址](https://doc.vben.pro/)
+完整设计文档在 [`docs/`](./docs/README.md)，建议按下面顺序读：
 
-## 安装使用
+| 文档 | 内容 |
+| --- | --- |
+| [平台设计方案](./docs/平台设计方案.md) | 背景、架构、技术选型与里程碑 |
+| [原型发布与访问机制](./docs/原型发布与访问机制.md) | ZIP 流水线、安全校验、版本回滚、访问鉴权 |
+| [权限模型设计](./docs/权限模型设计.md) | RBAC、内置角色、权限码清单 |
+| [数据库设计](./docs/数据库设计.md) | 全部表结构与 DDL |
+| [后端接口设计](./docs/后端接口设计.md) | API 契约、统一响应体、错误码 |
+| [前端设计](./docs/前端设计.md) | 信息架构、页面清单、状态管理 |
+| [部署与运维方案](./docs/部署与运维方案.md) | nginx、pm2、环境变量、上线检查清单 |
+| [迭代实施计划](./docs/迭代实施计划.md) | 里程碑与验收 Gate |
 
-1. 获取项目代码
+## 参与贡献
 
-```bash
-git clone https://github.com/vbenjs/vue-vben-admin.git
-```
+欢迎 Issue 与 PR！动手前请读 [CONTRIBUTING.md](./CONTRIBUTING.md)（环境准备、提交规范、检查清单），行为规范见 [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)。
 
-2. 安装依赖
-
-```bash
-cd vue-vben-admin
-npm i -g corepack
-pnpm install
-```
-
-3. 运行
-
-```bash
-pnpm dev
-```
-
-4. 打包
-
-```bash
-pnpm build
-```
-
-## 更新日志
-
-[CHANGELOG](https://github.com/vbenjs/vue-vben-admin/releases)
-
-## 如何贡献
-
-非常欢迎你的加入！[提一个 Issue](https://github.com/anncwb/vue-vben-admin/issues/new/choose) 或者提交一个 Pull Request。
-
-**Pull Request 流程：**
-
-1. Fork 代码
-2. 创建自己的分支：`git checkout -b feature/xxxx`
-3. 提交你的修改：`git commit -am 'feat(function): add xxxxx'`
-4. 推送您的分支：`git push origin feature/xxxx`
-5. 提交 `pull request`
-
-## Git 贡献提交规范
-
-参考 [vue](https://github.com/vuejs/vue/blob/dev/.github/COMMIT_CONVENTION.md) 规范 ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
-
-- `feat` 增加新功能
-- `fix` 修复问题/BUG
-- `style` 代码风格相关无影响运行结果的
-- `perf` 优化/性能提升
-- `refactor` 重构
-- `revert` 撤销修改
-- `test` 测试相关
-- `docs` 文档/注释
-- `chore` 依赖更新/脚手架配置修改等
-- `ci` 持续集成
-- `types` 类型定义文件更改
-
-## 浏览器支持
-
-本地开发推荐使用 `Chrome 80+` 浏览器
-
-支持现代浏览器，不支持 IE
-
-| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
-| :-: | :-: | :-: | :-: |
-| last 2 versions | last 2 versions | last 2 versions | last 2 versions |
-
-## 维护者
-
-[@Vben](https://github.com/anncwb)
-
-## Star 历史
-
-[![Star History Chart](https://api.star-history.com/svg?repos=vbenjs/vue-vben-admin&type=Date)](https://star-history.com/#vbenjs/vue-vben-admin&Date)
-
-## 捐赠
-
-如果你觉得这个项目对你有帮助，你可以帮作者买一杯咖啡表示支持！
-
-![donate](https://unpkg.com/@vbenjs/static-source@0.1.7/source/sponsor.png)
-
-<a style="display: block;width: 100px;height: 50px;line-height: 50px; color: #fff;text-align: center; background: #408aed;border-radius: 4px;" href="https://www.paypal.com/paypalme/cvvben">Paypal Me</a>
-
-## 贡献者
-
-<a href="https://openomy.app/github/vbenjs/vue-vben-admin" target="_blank" style="display: block; width: 100%;" align="center">
-  <img src="https://openomy.app/svg?repo=vbenjs/vue-vben-admin&chart=bubble&latestMonth=3" target="_blank" alt="Contribution Leaderboard" style="display: block; width: 100%;" />
- </a>
-
-<a href="https://github.com/vbenjs/vue-vben-admin/graphs/contributors">
-  <img alt="Contributors" src="https://contrib.rocks/image?repo=vbenjs/vue-vben-admin" />
-</a>
-
-## Discord
-
-- [Github Discussions](https://github.com/anncwb/vue-vben-admin/discussions)
+- 报 bug / 提需求：用 [Issue 模板](./.github/ISSUE_TEMPLATE)
+- 安全问题：**不要**公开开 issue，请按 [SECURITY.md](./SECURITY.md) 私密上报
 
 ## 许可证
 
-[MIT © Vben-2020](./LICENSE)
+本项目采用 [Apache License 2.0](./LICENSE)。
+
+管理端基于 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin)（MIT）构建，第三方依赖保留其各自的原始许可证。
