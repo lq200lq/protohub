@@ -1,0 +1,9 @@
+/* TW4 工具类在 @layer utilities，会被 antd 的游离组件样式无条件压过；Button 上的 px-0 / font-semibold 靠这两条按原意生效（标题不缩进、保持半粗） */
+.ant-btn.px-0 {
+  padding-inline: 0;
+  border-inline-width: 0;
+}
+
+.ant-btn.font-semibold {
+  font-weight: var(--font-weight-semibold, 600);
+}
