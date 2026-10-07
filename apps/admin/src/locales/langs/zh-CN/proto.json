@@ -83,7 +83,6 @@
     "bothBlankHint": "项目编码留空将生成「{0}」，原型编码将生成「{1}」",
     "closedHandoff": "已交给右下角的任务浮层继续，发布不会因关闭抽屉而中断",
     "createTitle": "上传 HTML 原型",
-    "currentVersion": "当前版本 v{0}",
     "dismiss": "取消跟踪",
     "duplicateHint": "服务端判定这份包与当前版本内容相同，普通发布会被拒绝；确认要再发一次就勾选强制发布。",
     "fileRequired": "请选择要上传的 zip 包",
@@ -92,35 +91,25 @@
     "keepWaiting": "继续等待",
     "linkLabel": "发布后访问链接",
     "linkPending": "编码确定后显示完整链接",
-    "newPrototype": "＋ 新建原型",
     "newPrototypeTitle": "新建原型并发布",
-    "noCurrentVersion": "该原型还没有发布过版本",
     "noteLabel": "版本说明",
     "notePlaceholder": "这次改了什么（可选）",
-    "page": {
-      "intro": "把新导出的包覆盖到已有原型：链接不变，访客刷新即看到新版本。",
-      "pickNothing": "选好项目与原型后，这里显示它的当前版本与访问地址，确认没选错再上传。",
-      "title": "上传发布"
-    },
     "projectMode": {
       "existing": "选择已有项目",
       "new": "新建项目"
     },
     "projectRequired": "请先选择归属项目",
-    "prototypeRequired": "请先选择要发布到哪个原型",
     "publishAction": "立即发布",
     "publishFailed": "发布失败",
     "published": "发布成功",
     "sections": {
       "file": "上传文件",
-      "pick": "选择原型",
       "project": "归属项目",
       "prototype": "原型信息"
     },
     "serverStage": "服务端处理：{0}（{1}%）",
     "targetGoneHint": "目标原型已被删除，这份包没有可挂的原型；请重新选择项目与原型再发一次。",
     "targetPrototype": "目标原型",
-    "versionCount": "累计发布 {0} 个版本",
     "viewDetail": "查看原型详情",
     "viewReport": "查看发布报告",
     "waitFailed": "任务状态查询失败",

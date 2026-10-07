@@ -8,7 +8,7 @@ import { PUBLISH_ACTION_LABEL_KEYS, publishActionOf } from './publish-action';
 /**
  * 主按钮判定的回归测试（迭代实施计划 §3.6：纯函数必须单测）。
  *
- * 这个函数是抽屉与上传发布页共用的唯一判定，所以这里钉的是"两处不会漂"的那条底线：
+ * 这个函数是发布主按钮的唯一判定，所以这里钉的是那条底线：
  * 处理中不能再提交、成功后不再留提交口、目标被删不给「重试」。
  */
 function rowOf(

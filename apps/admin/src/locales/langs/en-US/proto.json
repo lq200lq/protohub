@@ -82,7 +82,6 @@
     "bothBlankHint": "Empty project code will generate “{0}”, prototype code will generate “{1}”",
     "closedHandoff": "Handed to the task panel in the lower-right corner; closing this drawer does not stop the publish",
     "createTitle": "Upload HTML prototype",
-    "currentVersion": "Current version v{0}",
     "dismiss": "Stop tracking",
     "duplicateHint": "The server says this package matches the current version, so a normal publish is rejected. Tick force publish to release it anyway.",
     "forcePublish": "Force publish",
@@ -90,16 +89,9 @@
     "keepWaiting": "Keep waiting",
     "linkLabel": "Link after publishing",
     "linkPending": "The full link appears once both codes are settled",
-    "newPrototype": "+ New prototype",
     "newPrototypeTitle": "New prototype and publish",
-    "noCurrentVersion": "This prototype has no published version yet",
     "noteLabel": "Version note",
     "notePlaceholder": "What changed in this version (optional)",
-    "page": {
-      "intro": "Overwrite an existing prototype with a freshly exported package: the link stays the same.",
-      "pickNothing": "Pick a project and a prototype: its current version and access link show up here so you can confirm the target before uploading.",
-      "title": "Publish"
-    },
     "projectMode": {
       "existing": "Use an existing project",
       "new": "Create a project"
@@ -109,22 +101,19 @@
     "published": "Published",
     "sections": {
       "file": "Package",
-      "pick": "Pick a prototype",
       "project": "Project",
       "prototype": "Prototype"
     },
     "serverStage": "Server: {0} ({1}%)",
     "targetGoneHint": "The target prototype was deleted, so this package has nowhere to attach. Pick another project and prototype, then publish again.",
     "targetPrototype": "Target prototype",
-    "versionCount": "{0} versions published",
     "viewDetail": "Open prototype",
     "viewReport": "View release report",
     "waitFailed": "Failed to read the task status",
     "waitTimedOut": "Processing is taking longer than usual; check the prototype page later",
     "appendTitle": "Upload a new version",
     "fileRequired": "Pick a .zip package to upload",
-    "projectRequired": "Choose which project this belongs to",
-    "prototypeRequired": "Choose which prototype to publish to"
+    "projectRequired": "Choose which project this belongs to"
   },
   "release": {
     "current": "Live",

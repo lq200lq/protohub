@@ -17,7 +17,7 @@
 import type { Prisma } from '@prisma/client';
 import { PERMISSIONS } from '@protohub/shared';
 import { BUILT_IN_ROLES, permissionCodesFor } from './roles';
-import { MENU_SEED, menuNodeNamesFor } from './menus';
+import { MENU_SEED, pageMenuNames } from './menus';
 import { ensureFirstSuperAdmin, type CreatedSuperAdmin } from './admin';
 
 export { assertTestDatabase, assertNotTestDatabase } from './guard';
@@ -171,12 +171,13 @@ export async function runSeed(db: Prisma.TransactionClient): Promise<SeedResult>
   const menusInserted = insertedNames.length;
   const menusAlreadyPresent = MENU_SEED.length - menusInserted;
 
-  // 5) 角色菜单：页面节点按角色清单（§6.3），按钮自动跟随角色权限码集合（§3.7）
+  // 5) 角色菜单：页面节点全角色一致（§6.3），按钮跟随角色权限码集合（§3.7）
   let roleMenusAdded = 0;
+  const pageNames = pageMenuNames();
   for (const role of BUILT_IN_ROLES) {
     const roleId = (roleByCode.get(role.code) as { id: bigint }).id;
     const allowedCodes = seedPermCodesByRole.get(role.code) as Set<string>;
-    const wantedNames = new Set<string>(menuNodeNamesFor(role.code));
+    const wantedNames = new Set<string>(pageNames);
     for (const n of MENU_SEED) {
       if (n.type === 'button' && n.authCode && allowedCodes.has(n.authCode)) {
         wantedNames.add(n.name);

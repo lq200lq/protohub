@@ -345,7 +345,7 @@ const inFlight = computed(() => {
   );
 });
 const succeeded = computed(() => row.value?.status === 'success');
-/** 主按钮的四种状态与上传发布页共用同一条判定（`utils/publish-action`），这里只落到抽屉底部 */
+/** 主按钮的状态判定走 `utils/publish-action` 的纯函数，这里只落到抽屉底部 */
 const action = computed(() => publishActionOf(row.value));
 
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -759,7 +759,7 @@ function openDetail(prototypeId?: string) {
         {{ codeHint }}
       </p>
 
-      <!-- ③ 上传文件：与上传发布页 §3.6 是同一段，出口语义收在 PublishTaskPanel 一处 -->
+      <!-- ③ 上传文件：出口语义收在 PublishTaskPanel 一处 -->
       <section class="space-y-2">
         <h3 class="text-sm font-semibold">
           {{ $t('proto.publish.sections.file') }}

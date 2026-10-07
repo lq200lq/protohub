@@ -1,7 +1,7 @@
 /**
  * 菜单树种子（数据库设计 §6.3 + 前端设计 §2/§3/§4）。
  *
- * 结构：扁平一级菜单（工作台/原型项目/上传发布/访问记录/设置 + 两个 hideInMenu 详情页 + Profile），
+ * 结构：扁平一级菜单（工作台/原型项目/访问记录/设置 + 两个 hideInMenu 详情页 + Profile），
  * 每个"写操作"权限码都有一个 type='button' 节点（权限模型 §3.7：按钮节点只是授权树的
  * 勾选骨架，最终权限仍以 sys_role_permission 为准）。
  *
@@ -78,15 +78,6 @@ export const MENU_SEED: readonly MenuSeedNode[] = [
     hideInMenu: true,
   },
   {
-    name: 'ProtoPublish',
-    type: 'menu',
-    title: '上传发布',
-    path: '/proto/publish',
-    component: '/proto/publish/index',
-    icon: 'lucide:cloud-upload',
-    sort: 5,
-  },
-  {
     name: 'ProtoAccessLog',
     type: 'menu',
     title: '访问记录',
@@ -155,14 +146,9 @@ export const MENU_SEED: readonly MenuSeedNode[] = [
 ] as const;
 
 /**
- * 角色 → 菜单节点 name（数据库设计 §8.3-4"为内置角色建立角色-菜单关联"）。
- * button 节点自动跟随角色权限码集合（§3.7），这里只声明页面节点的差异：
- * viewer 不给「上传发布」页（它没有 publish 码，进去也是 403，不如不下发）。
+ * 页面节点（type≠button）的 name 清单,用于角色-菜单关联（数据库设计 §8.3-4）。
+ * button 节点不在这里:它们跟随角色权限码集合（权限模型 §3.7）由 seed 另行派生。
  */
-export function menuNodeNamesFor(role: 'super_admin' | 'admin' | 'publisher' | 'viewer'): string[] {
-  const pages = MENU_SEED.filter((n) => n.type !== 'button').map((n) => n.name);
-  if (role === 'viewer') {
-    return pages.filter((n) => n !== 'ProtoPublish');
-  }
-  return pages;
+export function pageMenuNames(): string[] {
+  return MENU_SEED.filter((n) => n.type !== 'button').map((n) => n.name);
 }
