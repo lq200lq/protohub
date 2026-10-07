@@ -10,7 +10,7 @@
   ![pnpm](https://img.shields.io/badge/pnpm-%E2%89%A511-blue)
   ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-blue)
 
-  [English](./README.md) | **中文** ([README.zh-CN.md](./README.zh-CN.md))
+  **English** | [中文](./README.zh-CN.md)
 
   <sub>Quick start: <code>pnpm install</code> → configure env files → <code>pnpm db:migrate &amp;&amp; pnpm db:seed</code> → <code>pnpm dev</code>. Details below.</sub>
 </div>
@@ -58,7 +58,7 @@ Handing a prototype to a reviewer usually means mailing a ZIP or standing up a t
 | |
 | :---: |
 | <img src="./assets/screenshots/07-settings.png" alt="Settings" width="100%"> |
-| **Settings**: users / roles / menus / logs |
+| **System Settings**: account security / users / roles / menus / logs (nested submenus) |
 
 ## Architecture
 
@@ -140,7 +140,7 @@ pnpm dev              # admin + server together; or pnpm dev:admin / pnpm dev:se
 | `pnpm db:migrate` / `db:seed` / `db:seed-admin` / `db:studio` | Migrate / seed / create super admin / Prisma Studio |
 | `pnpm check` | Type check + circular deps + consistency + tests (the pre-merge gate) |
 | `pnpm check:consistency` | 7 read-only rules: permission codes ↔ tables, menus ↔ real files, … |
-| `pnpm lint` / `pnpm format` | ESLint · Stylelint · Prettier |
+| `pnpm lint` / `pnpm format` | ESLint · oxlint · Stylelint · oxfmt |
 | `pnpm test` / `pnpm test:admin` | Full unit tests / admin unit tests |
 | `pnpm smoke` | E2E smoke: login → project → publish → three access policies → rollback → archive → logs |
 | `pnpm bench` | List / publish / visit performance benchmarks |
@@ -156,7 +156,7 @@ protohub/
 ├── packages/
 │   ├── db/             # Prisma schema, migrations, seeds (roles/permissions/menus)
 │   ├── shared/         # Cross-tier type contracts, permission constants
-│   └── @vben/…         # Framework packages (effects / @core / locales / …)
+│   └── effects/ @core/ locales/ …  # Framework packages (from vben-admin)
 ├── scripts/            # Consistency checks, smoke, benchmarks, deploy tooling
 ├── docs/               # Design documents (start at docs/README.md)
 └── assets/             # Banner and screenshots used by the READMEs

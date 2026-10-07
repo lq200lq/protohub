@@ -57,8 +57,8 @@
 
 | |
 | :---: |
-| <img src="./assets/screenshots/07-settings.png" alt="设置" width="100%"> |
-| **设置**：用户 / 角色 / 菜单 / 日志管理 |
+| <img src="./assets/screenshots/07-settings.png" alt="系统设置" width="100%"> |
+| **系统设置**：账号安全 / 用户 / 角色 / 菜单 / 日志管理（二级子菜单） |
 
 ## 架构
 
@@ -139,7 +139,7 @@ pnpm dev              # 同时起管理端与服务端；也可以分别用 pnpm
 | `pnpm db:migrate` / `db:seed` / `db:seed-admin` / `db:studio` | 迁移 / 种子数据 / 创建超管 / Prisma Studio |
 | `pnpm check` | 类型 + 循环依赖 + 一致性 + 测试（提交前的总门禁） |
 | `pnpm check:consistency` | 7 条规则校验权限码↔表、菜单↔真实文件等（只读） |
-| `pnpm lint` / `pnpm format` | ESLint · Stylelint · Prettier |
+| `pnpm lint` / `pnpm format` | ESLint · oxlint · Stylelint · oxfmt |
 | `pnpm test` / `pnpm test:admin` | 全量单测 / 管理端单测 |
 | `pnpm smoke` | 端到端冒烟：登录→建项目→发布→三档访问→回滚→归档→查记录 |
 | `pnpm bench` | 列表/发布/访问性能基准 |
@@ -155,7 +155,7 @@ protohub/
 ├── packages/
 │   ├── db/             # Prisma schema、迁移、种子（角色/权限/菜单）
 │   ├── shared/         # 跨端类型契约、权限码常量
-│   └── @vben/…         # 框架层包（effects / @core / locales / …）
+│   └── effects/ @core/ locales/ …  # 框架层包（vben-admin 自带）
 ├── scripts/            # 一致性检查、冒烟、基准、部署与运维脚本
 ├── docs/               # 设计文档（先读 docs/README.md 的文档地图）
 └── assets/             # README 用 banner 与系统截图

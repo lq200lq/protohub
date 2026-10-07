@@ -46,8 +46,8 @@ const PAGE_CODE_SITES: Record<string, string[]> = {
   'proto:prototype:list': ['ProtoProjectDetail'],
   'proto:prototype:read': ['ProtoPrototypeDetail'],
   'proto:release:list': ['ProtoPrototypeDetail'],
-  'system:role:read': ['SystemSetting'],
-  'system:user:read': ['SystemSetting'],
+  'system:role:read': ['SystemSettingRole'],
+  'system:user:read': ['SystemSettingUser'],
 };
 
 function collect(
